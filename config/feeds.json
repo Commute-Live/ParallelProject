@@ -2,71 +2,126 @@
   {
     "label": "mta_subway",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
+    }
   },
   {
     "label": "mta_lirr",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfslirr.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfslirr.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfslirr.zip"
+    }
   },
   {
     "label": "mta_mnr",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip"
+    }
   },
   {
     "label": "mta_bus_bx",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_bx.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_bx.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_bx.zip"
+    }
   },
   {
     "label": "mta_bus_b",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip"
+    }
   },
   {
     "label": "mta_bus_m",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_m.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_m.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_m.zip"
+    }
   },
   {
     "label": "mta_bus_q",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_q.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_q.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_q.zip"
+    }
   },
   {
     "label": "mta_bus_si",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_si.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_si.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_si.zip"
+    }
   },
   {
     "label": "mta_busco",
     "city": "new_york",
-    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_busco.zip"
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_busco.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_busco.zip"
+    }
   },
   {
     "label": "cta",
     "city": "chicago",
-    "url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip"
+    "url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip"
+    }
   },
   {
     "label": "mbta",
     "city": "boston",
-    "url": "https://cdn.mbta.com/MBTA_GTFS.zip"
+    "archive": {
+      "type": "mbta_archived_feeds",
+      "index_url": "https://cdn.mbta.com/archive/archived_feeds.txt"
+    }
   },
   {
     "label": "njt_rail",
     "city": "new_jersey",
-    "url": "https://www.njtransit.com/rail_data.zip"
+    "url": "https://www.njtransit.com/rail_data.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://www.njtransit.com/rail_data.zip"
+    }
   },
   {
     "label": "njt_bus",
     "city": "new_jersey",
-    "url": "https://www.njtransit.com/bus_data.zip"
+    "url": "https://www.njtransit.com/bus_data.zip",
+    "archive": {
+      "type": "wayback_cdx",
+      "source_url": "https://www.njtransit.com/bus_data.zip"
+    }
   },
   {
     "label": "septa",
     "city": "philadelphia",
-    "url": "https://www3.septa.org/developer/gtfs_public.zip"
+    "archive": {
+      "type": "github_releases",
+      "repo": "septadev/GTFS",
+      "asset_pattern": "\\.zip$"
+    }
   }
 ]

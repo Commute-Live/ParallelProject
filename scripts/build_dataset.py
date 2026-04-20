@@ -17,6 +17,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+
 
 TRIP_RECORD = struct.Struct("<12I")
 DEFAULT_SERVICE_MASK = 0b1111111
@@ -45,6 +47,7 @@ class GTFSSource:
     name: str
     directory: Path | None = None
     archive: Path | None = None
+    archive_member: str | None = None
 
 
 class GTFSReader:
@@ -65,17 +68,36 @@ class GTFSReader:
                 sources.append(GTFSSource(name=self.label, directory=self.directory))
             elif nested_zips:
                 for nested_zip in nested_zips:
-                    sources.append(
-                        GTFSSource(
-                            name=f"{self.label}/{nested_zip.stem}",
-                            archive=nested_zip,
-                        )
-                    )
+                    sources.extend(self._discover_archive_sources(nested_zip, f"{self.label}/{nested_zip.stem}"))
 
         if not sources and self.zip_path.exists():
-            sources.append(GTFSSource(name=self.label, archive=self.zip_path))
+            sources.extend(self._discover_archive_sources(self.zip_path, self.label))
 
         return sources
+
+    def _discover_archive_sources(self, archive_path: Path, source_name: str) -> list[GTFSSource]:
+        with zipfile.ZipFile(archive_path) as archive:
+            top_level_txt = sorted(
+                name for name in archive.namelist() if name.lower().endswith(".txt")
+            )
+            nested_zips = sorted(
+                name for name in archive.namelist() if name.lower().endswith(".zip")
+            )
+
+        if top_level_txt:
+            return [GTFSSource(name=source_name, archive=archive_path)]
+
+        if nested_zips:
+            return [
+                GTFSSource(
+                    name=f"{source_name}/{Path(nested_zip).stem}",
+                    archive=archive_path,
+                    archive_member=nested_zip,
+                )
+                for nested_zip in nested_zips
+            ]
+
+        return [GTFSSource(name=source_name, archive=archive_path)]
 
     def _resolve_directory_member(self, base_dir: Path, filename: str) -> Path | None:
         direct_path = base_dir / filename
@@ -100,6 +122,25 @@ class GTFSReader:
 
         return None
 
+    def _iter_nested_archive_rows(
+        self,
+        archive: zipfile.ZipFile,
+        nested_member: str,
+        filename: str,
+    ) -> Iterator[dict[str, str]]:
+        with archive.open(nested_member, "r") as nested_handle:
+            nested_bytes = nested_handle.read()
+
+        with zipfile.ZipFile(io.BytesIO(nested_bytes)) as nested_archive:
+            member_name = self._resolve_archive_member(nested_archive, filename)
+            if member_name is None:
+                return
+
+            with nested_archive.open(member_name, "r") as raw_handle:
+                with io.TextIOWrapper(raw_handle, encoding="utf-8-sig", newline="") as handle:
+                    for row in csv.DictReader(handle):
+                        yield row
+
     def iter_csv_rows(self, filename: str, required: bool = True) -> Iterator[tuple[str, dict[str, str]]]:
         matched = False
 
@@ -116,6 +157,20 @@ class GTFSReader:
 
             if source.archive is not None:
                 with zipfile.ZipFile(source.archive) as archive:
+                    if source.archive_member is not None:
+                        nested_rows = self._iter_nested_archive_rows(
+                            archive,
+                            source.archive_member,
+                            filename,
+                        )
+                        found_row = False
+                        for row in nested_rows:
+                            if not found_row:
+                                matched = True
+                                found_row = True
+                            yield source.name, row
+                        continue
+
                     member_name = self._resolve_archive_member(archive, filename)
                     if member_name is None:
                         continue
@@ -133,17 +188,17 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--config",
-        default="final_project/config/feeds.json",
+        default=str(ROOT_DIR / "config" / "feeds.json"),
         help="Path to the feed configuration JSON",
     )
     parser.add_argument(
         "--raw-dir",
-        default="final_project/data/raw",
+        default=str(ROOT_DIR / "data" / "raw"),
         help="Directory containing downloaded GTFS feeds",
     )
     parser.add_argument(
         "--out-dir",
-        default="final_project/data/processed",
+        default=str(ROOT_DIR / "data" / "processed"),
         help="Directory where the binary dataset and manifest should be written",
     )
     parser.add_argument(

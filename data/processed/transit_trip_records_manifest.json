@@ -1,6 +1,6 @@
 {
   "record_size_bytes": 48,
-  "record_count": 578882,
+  "record_count": 3703385,
   "cities": [
     {
       "city_id": 0,
@@ -24,11 +24,11 @@
     }
   ],
   "city_trip_counts": {
-    "new_york": 290000,
-    "chicago": 94496,
-    "boston": 121506,
+    "new_york": 1092298,
+    "chicago": 319822,
+    "boston": 1693567,
     "new_jersey": 36483,
-    "philadelphia": 36397
+    "philadelphia": 561215
   },
   "feeds": [
     {
@@ -36,9 +36,9 @@
       "label": "mta_subway",
       "city": "new_york",
       "city_id": 0,
-      "trip_records": 79590,
-      "routes": 29,
-      "trips": 79590
+      "trip_records": 228083,
+      "routes": 90,
+      "trips": 228083
     },
     {
       "feed_id": 1,
@@ -81,54 +81,54 @@
       "label": "mta_bus_m",
       "city": "new_york",
       "city_id": 0,
-      "trip_records": 30289,
-      "routes": 294,
-      "trips": 30289
+      "trip_records": 234816,
+      "routes": 2126,
+      "trips": 234816
     },
     {
       "feed_id": 6,
       "label": "mta_bus_q",
       "city": "new_york",
       "city_id": 0,
-      "trip_records": 24969,
-      "routes": 294,
-      "trips": 24969
+      "trip_records": 245433,
+      "routes": 2745,
+      "trips": 245433
     },
     {
       "feed_id": 7,
       "label": "mta_bus_si",
       "city": "new_york",
       "city_id": 0,
-      "trip_records": 13137,
-      "routes": 294,
-      "trips": 13137
+      "trip_records": 151779,
+      "routes": 3056,
+      "trips": 151779
     },
     {
       "feed_id": 8,
       "label": "mta_busco",
       "city": "new_york",
       "city_id": 0,
-      "trip_records": 36620,
-      "routes": 92,
-      "trips": 36620
+      "trip_records": 126792,
+      "routes": 275,
+      "trips": 126792
     },
     {
       "feed_id": 9,
       "label": "cta",
       "city": "chicago",
       "city_id": 1,
-      "trip_records": 94496,
-      "routes": 131,
-      "trips": 94496
+      "trip_records": 319822,
+      "routes": 524,
+      "trips": 319822
     },
     {
       "feed_id": 10,
       "label": "mbta",
       "city": "boston",
       "city_id": 2,
-      "trip_records": 121506,
-      "routes": 404,
-      "trips": 121506
+      "trip_records": 1693567,
+      "routes": 4791,
+      "trips": 1693567
     },
     {
       "feed_id": 11,
@@ -153,12 +153,12 @@
       "label": "septa",
       "city": "philadelphia",
       "city_id": 4,
-      "trip_records": 36397,
-      "routes": 185,
-      "trips": 36397
+      "trip_records": 561215,
+      "routes": 2187,
+      "trips": 561215
     }
   ],
-  "binary_path": "data\\processed\\transit_trip_records.bin",
+  "binary_path": "C:\\Users\\liakht\\Documents\\OtherPrograms\\Distributed Systems\\hw4\\ParallelProject\\data\\processed\\transit_trip_records.bin",
   "sort_key": [
     "city_id",
     "route_hash",
