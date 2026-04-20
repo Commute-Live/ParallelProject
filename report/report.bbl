@@ -1,0 +1,217 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{14}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Devunuri and Lehe(2025)]%
+        {devunuri2025transitgpt}
+\bibfield{author}{\bibinfo{person}{Saipraneeth Devunuri} {and}
+  \bibinfo{person}{Lewis Lehe}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{{TransitGPT}: A Generative {AI}-Based Framework for
+  Interacting with {GTFS} Data Using Large Language Models}.
+\newblock \bibinfo{journal}{\emph{Public Transport}}  \bibinfo{volume}{17}
+  (\bibinfo{year}{2025}), \bibinfo{pages}{319--345}.
+\newblock
+\href{https://doi.org/10.1007/s12469-025-00395-w}{doi:\nolinkurl{10.1007/s12469-025-00395-w}}
+
+
+\bibitem[Fayyaz et~al\mbox{.}(2017)]%
+        {fayyaz2017gtfs}
+\bibfield{author}{\bibinfo{person}{S.~Kiavash Fayyaz},
+  \bibinfo{person}{Xiaoyue~Cathy Liu}, {and} \bibinfo{person}{Guohui Zhang}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{An Efficient General Transit Feed Specification
+  ({GTFS}) Enabled Algorithm for Dynamic Transit Accessibility Analysis}.
+\newblock \bibinfo{journal}{\emph{PLOS ONE}} \bibinfo{volume}{12},
+  \bibinfo{number}{10} (\bibinfo{year}{2017}), \bibinfo{pages}{e0185333}.
+\newblock
+\href{https://doi.org/10.1371/journal.pone.0185333}{doi:\nolinkurl{10.1371/journal.pone.0185333}}
+
+
+\bibitem[Fortin et~al\mbox{.}(2016)]%
+        {fortin2016gtfs}
+\bibfield{author}{\bibinfo{person}{Philippe Fortin}, \bibinfo{person}{Catherine
+  Morency}, {and} \bibinfo{person}{Martin Tr{\'e}panier}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Innovative {GTFS} Data Application for Transit
+  Network Analysis Using a Graph-Oriented Method}.
+\newblock \bibinfo{journal}{\emph{Journal of Public Transportation}}
+  \bibinfo{volume}{19}, \bibinfo{number}{4} (\bibinfo{year}{2016}),
+  \bibinfo{pages}{18--37}.
+\newblock
+\href{https://doi.org/10.5038/2375-0901.19.4.2}{doi:\nolinkurl{10.5038/2375-0901.19.4.2}}
+
+
+\bibitem[Guthrie et~al\mbox{.}(2017)]%
+        {guthrie2017accessibility}
+\bibfield{author}{\bibinfo{person}{Andrew Guthrie}, \bibinfo{person}{Yingling
+  Fan}, {and} \bibinfo{person}{Kirti~Vardhan Das}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Accessibility Scenario Analysis of a Hypothetical
+  Future Transit Network: Social Equity Implications of a General Transit Feed
+  Specification-Based Sketch Planning Tool}.
+\newblock \bibinfo{journal}{\emph{Transportation Research Record}}
+  \bibinfo{volume}{2671}, \bibinfo{number}{1} (\bibinfo{year}{2017}),
+  \bibinfo{pages}{1--11}.
+\newblock
+\href{https://doi.org/10.3141/2671-01}{doi:\nolinkurl{10.3141/2671-01}}
+
+
+\bibitem[Javanmard et~al\mbox{.}(2025)]%
+        {javanmard2025realtime}
+\bibfield{author}{\bibinfo{person}{Reyhane Javanmard}, \bibinfo{person}{Luyu
+  Liu}, \bibinfo{person}{Jed~A. Long}, {and} \bibinfo{person}{Jinhyung Lee}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Using Realtime {GTFS} to Generate Easy-to-Use
+  Transit Accessibility Measures under Travel Time Uncertainty}.
+\newblock \bibinfo{journal}{\emph{Travel Behaviour and Society}}
+  \bibinfo{volume}{41} (\bibinfo{year}{2025}), \bibinfo{pages}{101054}.
+\newblock
+\href{https://doi.org/10.1016/j.tbs.2025.101054}{doi:\nolinkurl{10.1016/j.tbs.2025.101054}}
+
+
+\bibitem[{MobilityData}(2026a)]%
+        {gtfs_overview}
+\bibfield{author}{\bibinfo{person}{{MobilityData}}.}
+  \bibinfo{year}{2026}\natexlab{a}.
+\newblock \bibinfo{title}{{General Transit Feed Specification (GTFS)
+  Overview}}.
+\newblock
+  \bibinfo{howpublished}{\url{https://gtfs.org/documentation/overview/}}.
+\newblock
+\newblock
+\shownote{Accessed 2026-04-19}.
+
+
+\bibitem[{MobilityData}(2026b)]%
+        {gtfs_schedule_ref}
+\bibfield{author}{\bibinfo{person}{{MobilityData}}.}
+  \bibinfo{year}{2026}\natexlab{b}.
+\newblock \bibinfo{title}{{General Transit Feed Specification Schedule
+  Reference}}.
+\newblock
+  \bibinfo{howpublished}{\url{https://gtfs.org/documentation/schedule/reference/}}.
+\newblock
+\newblock
+\shownote{Revised March 3, 2026; accessed 2026-04-19}.
+
+
+\bibitem[{MobilityData}(2026c)]%
+        {gtfs_realtime_ref}
+\bibfield{author}{\bibinfo{person}{{MobilityData}}.}
+  \bibinfo{year}{2026}\natexlab{c}.
+\newblock \bibinfo{title}{{GTFS Realtime Reference}}.
+\newblock \bibinfo{howpublished}{\url{https://gtfs.org/spec/gtfs-realtime}}.
+\newblock
+\newblock
+\shownote{Accessed 2026-04-19}.
+
+
+\bibitem[{MPI Forum}(2023)]%
+        {mpi41}
+\bibfield{author}{\bibinfo{person}{{MPI Forum}}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{{MPI 4.1 Standard Documents}}.
+\newblock
+  \bibinfo{howpublished}{\url{https://www.mpi-forum.org/docs/mpi-4.1/}}.
+\newblock
+\newblock
+\shownote{MPI 4.1 approved November 2, 2023; accessed 2026-04-19}.
+
+
+\bibitem[Nickolls et~al\mbox{.}(2008)]%
+        {nickolls2008cuda}
+\bibfield{author}{\bibinfo{person}{John Nickolls}, \bibinfo{person}{Ian Buck},
+  \bibinfo{person}{Michael Garland}, {and} \bibinfo{person}{Kevin Skadron}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Scalable Parallel Programming with {CUDA}}.
+\newblock \bibinfo{journal}{\emph{Queue}} \bibinfo{volume}{6},
+  \bibinfo{number}{2} (\bibinfo{year}{2008}), \bibinfo{pages}{40--53}.
+\newblock
+\href{https://doi.org/10.1145/1365490.1365500}{doi:\nolinkurl{10.1145/1365490.1365500}}
+
+
+\bibitem[{NVIDIA}(2026)]%
+        {cuda_guide}
+\bibfield{author}{\bibinfo{person}{{NVIDIA}}.} \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{{CUDA C++ Programming Guide}}.
+\newblock
+  \bibinfo{howpublished}{\url{https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html}}.
+\newblock
+\newblock
+\shownote{Accessed 2026-04-19}.
+
+
+\bibitem[Pereira et~al\mbox{.}(2021)]%
+        {pereira2021r5r}
+\bibfield{author}{\bibinfo{person}{Rafael H.~M. Pereira},
+  \bibinfo{person}{Marcus Saraiva}, \bibinfo{person}{Daniel Herszenhut},
+  \bibinfo{person}{Carlos Kaue~Vieira Braga}, {and}
+  \bibinfo{person}{Matthew~Wigginton Conway}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{r5r: Rapid Realistic Routing on Multimodal
+  Transport Networks with {R5} in {R}}.
+\newblock \bibinfo{journal}{\emph{Findings}} (\bibinfo{year}{2021}),
+  \bibinfo{pages}{21262}.
+\newblock
+\href{https://doi.org/10.32866/001c.21262}{doi:\nolinkurl{10.32866/001c.21262}}
+
+
+\bibitem[Thakur et~al\mbox{.}(1999)]%
+        {thakur1999romio}
+\bibfield{author}{\bibinfo{person}{Rajeev Thakur}, \bibinfo{person}{William
+  Gropp}, {and} \bibinfo{person}{Ewing Lusk}.} \bibinfo{year}{1999}\natexlab{}.
+\newblock \showarticletitle{Data Sieving and Collective I/O in {ROMIO}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the Seventh Symposium on the
+  Frontiers of Massively Parallel Computation}}. \bibinfo{pages}{182--189}.
+\newblock
+\href{https://doi.org/10.1109/FMPC.1999.750599}{doi:\nolinkurl{10.1109/FMPC.1999.750599}}
+
+
+\bibitem[Zhou et~al\mbox{.}(2024)]%
+        {zhou2024latency}
+\bibfield{author}{\bibinfo{person}{Joseph~Q. Zhou}, \bibinfo{person}{Jay
+  Jackson}, \bibinfo{person}{Pam Stravitz}, \bibinfo{person}{Gregory~J.
+  Barlow}, {and} \bibinfo{person}{Peter Koonce}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Addressing Data Latency in {GTFS} Realtime to
+  Improve Transit Signal Priority}.
+\newblock \bibinfo{journal}{\emph{Transportation Research Record}}
+  \bibinfo{volume}{2679}, \bibinfo{number}{1} (\bibinfo{year}{2024}).
+\newblock
+\href{https://doi.org/10.1177/03611981241255027}{doi:\nolinkurl{10.1177/03611981241255027}}
+
+
+\end{thebibliography}

@@ -1,4 +1,4 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf,nonacm]{acmart}
 
 \setcopyright{none}
 \settopmatter{printacmref=false,printfolios=true}
@@ -12,9 +12,16 @@
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{needspace}
 \usepackage{pgfplots}
 \usepgfplotslibrary{statistics}
 \pgfplotsset{compat=1.18}
+
+\makeatletter
+\def\@secfont{\bfseries\Large\section@raggedright}
+\def\@subsecfont{\bfseries\large\section@raggedright}
+\def\@subsubsecfont{\bfseries\normalsize\itshape}
+\makeatother
 
 \title{Massively Parallel Multi-City Transit Schedule Analytics with MPI, MPI-I/O, and CUDA}
 
@@ -34,7 +41,7 @@
   \state{New York}
   \country{USA}
 }
-\email{replace-with-email@rpi.edu}
+\email{liakht@rpi.edu}
 
 \author{Nikul Patel}
 \affiliation{%
@@ -43,7 +50,7 @@
   \state{New York}
   \country{USA}
 }
-\email{replace-with-email@rpi.edu}
+\email{pateln14@rpi.edu}
 
 \renewcommand{\shortauthors}{Pan, Liakh, and Patel}
 
@@ -217,7 +224,7 @@ All cluster experiments target AiMOS POWER9 nodes with NVIDIA V100 GPUs and use 
 \end{quote}
 as described in the course materials. The build process compiles the MPI logic with \texttt{mpicc} and the CUDA logic with \texttt{nvcc}, then links the resulting objects into a single executable.
 
-The planned performance study follows the assignment requirements:
+The performance study follows the assignment requirements:
 \begin{enumerate}[leftmargin=*]
   \item \textbf{Strong scaling}: fix the total record count and increase the rank count.
   \item \textbf{Weak scaling}: fix the records per rank and grow the total dataset proportionally.
@@ -249,6 +256,23 @@ We report this breakdown so we can separate bottlenecks in shared-file access, c
 \end{table}
 
 At this point, both the provider-analysis workflow and the AiMOS timing workflow are producing reportable outputs. The provider-analysis figures come from the local GTFS-derived binary dataset, while the timing figures come from the successful AiMOS experiment sweeps recorded in \texttt{experiment\_results.csv}. In the weak-scaling experiments, requested record counts beyond the local dataset size are clamped by the available input, so the largest weak-scaling runs ultimately operate on the full 576,229-record dataset.
+
+\section{Validation and Limitations}
+\subsection{Validation Strategy}
+Because this project combines preprocessing, distributed execution, and GPU acceleration, correctness had to be checked at more than one stage. The first level of validation was at preprocessing time. For each provider group, the generated binary dataset was compared against simple feed-level expectations such as the number of routes retained, the number of trip records emitted, and whether basic schedule summaries were plausible. This step was especially important for feeds that did not follow the most common GTFS packaging pattern. Missing \texttt{calendar.txt} files, nested zip archives, and extended route-type values could all introduce silent errors if they were not handled explicitly.
+
+The second level of validation was at the analytics stage. The provider-level results reported by the analyzer were checked for consistency across repeated runs and across backend choices. In particular, the CPU-only MPI backend and the hybrid MPI+CUDA backend were expected to produce the same aggregate outputs even when their runtime costs differed substantially. Matching provider summaries across those two paths served as a practical correctness check for the CUDA kernel, the device-memory transfers, and the final reduction logic. Distributed runs were also checked across different MPI rank counts to make sure that partitioning the dataset did not change the final totals.
+
+Boundary conditions required separate attention because route headways depend on adjacent records that may fall on different ranks. Without an explicit boundary exchange, a distributed run could undercount or distort headways at partition edges. To guard against that, the implementation exchanges one record of boundary state with neighboring ranks and then recomputes the first local headway using the previous rank's last record when appropriate. This is a small communication step, but it is necessary for correctness. Its effect is visible in the fact that headway-based provider summaries remain stable across rank counts rather than drifting as the partition shape changes.
+
+\subsection{Current Limitations}
+The main limitation of the current study is that it analyzes scheduled service rather than observed operations. GTFS static feeds describe planned trips, not whether vehicles actually ran on time, whether trips were canceled, or how passenger demand was distributed across the network. As a result, the headway and irregularity metrics in this report should be read as schedule-structure summaries, not as direct reliability measures. A provider may show wide scheduled gaps because it is designed around commuter or regional service, while a dense urban provider may show frequent short scheduled headways without necessarily delivering those headways in practice.
+
+A second limitation is the size of the dataset relative to the GPU overheads on AiMOS. The local analytics kernel does benefit from GPU execution, but the full application remains dominated by fixed costs such as CUDA runtime initialization and host-device transfers. This means the present report captures an important hybrid-programming result, but not yet a case where the GPU wins end-to-end. Larger datasets, repeated analyses over the same resident device data, or heavier local kernels would likely change that balance. The current implementation therefore demonstrates a correct hybrid workflow more clearly than it demonstrates a production-ready acceleration point.
+
+There are also modeling choices in the preprocessing stage that simplify the problem. The binary trip-record representation is intentionally compact and does not preserve every field that might be useful in later analyses. Likewise, route-type normalization is necessary to compare providers cleanly, but it compresses some of the variety present in extended GTFS route codes. These choices are reasonable for the current assignment because they make the distributed analysis simpler and more measurable, but they also limit the granularity of the final provider comparison.
+
+Finally, the current provider set is broad enough to support comparison but still limited in geographic scope and time horizon. The study covers several major northeastern and midwestern agencies, but it does not yet include a larger national sample, seasonal variation, or historical snapshots over multiple service periods. Expanding the provider set would make the application findings more general, and expanding the time horizon would make the performance study more demanding in exactly the way that could better justify GPU acceleration.
 
 \section{Transit Provider Findings}
 \subsection{Peak vs.\ Off-Peak Concentration}
@@ -644,6 +668,7 @@ The weak-scaling study fixes the records per rank and increases the total worklo
 The weak-scaling plots reinforce the strong-scaling result: the implementation runs correctly in hybrid mode, but the end-to-end CUDA path is still overhead-bound. For this workload size, GPU setup and transfer costs dominate the short local compute phase.
 
 \section{Analysis of Performance Results}
+\Needspace{14\baselineskip}
 The measured results make the dominant bottlenecks clearer than the original design-level expectations:
 \begin{itemize}[leftmargin=*]
   \item \textbf{CUDA runtime overhead dominates total time.} The measured GPU compute phase is only a few milliseconds, but total application time is hundreds of milliseconds, implying that device setup and transfer overhead are the primary bottleneck.
@@ -664,13 +689,53 @@ One practical lesson from the data-engineering stage is that publicly available 
 Another lesson is that no single metric is enough. Peak/off-peak ratios alone make the agencies look fairly similar, but route intensity, service span, and trip-duration distributions separate them more clearly. MTA and CTA are both high-intensity systems by trips per route, yet MTA keeps that intensity across a longer service-day span. MBTA has a broader mode mix and a shorter median trip duration than the commuter-oriented providers. NJ Transit’s peak concentration is easier to interpret when paired with its longer durations, larger headways, lower route intensity, and higher wide-gap rate.
 
 \section{Team Contributions}
-Replace this section with the actual team roster and contribution details. A concise format that satisfies the rubric is one paragraph per member:
-\begin{itemize}[leftmargin=*]
-  \item \textbf{Member A}: implemented preprocessing and dataset construction, handled GTFS packaging edge cases, and validated provider summaries.
-  \item \textbf{Member B}: implemented MPI partitioning, MPI-I/O, and global reduction logic.
-  \item \textbf{Member C}: implemented CUDA kernels, device-memory management, and CPU-versus-GPU comparison support.
-  \item \textbf{Member D}: executed AiMOS experiments, collected timing data, generated figures, and integrated the report narrative and references.
-\end{itemize}
+\textbf{Shimu Pan} led the project from the data and report side.
+Early in the project, Shimu researched the GTFS format,
+identified which schedule files and derived metrics would be
+most useful for the transit-analysis portion of the assignment,
+and helped define the overall project scope and workflow.
+During implementation, Shimu built the preprocessing and
+dataset-construction pipeline that converts raw GTFS feeds
+into the fixed-width binary trip-record format used by the
+analyzer. This work included handling real feed irregularities
+such as missing \texttt{calendar.txt} files, nested archives, and
+extended route-type values, as well as validating that the resulting provider summaries were plausible. In the later stages
+of the project, Shimu ran AiMOS experiments, collected and
+organized timing outputs, generated the figures used in the
+report, and integrated the final written report, including the
+narrative around the provider findings, performance results,
+and references.
+
+\textbf{Nikul Patel} focused on the distributed MPI side of the
+system from design through testing. At the beginning of the
+project, Nikul researched the MPI and MPI-I/O features most
+relevant to the assignment, especially collective file access,
+partitioning strategies, and reduction patterns for distributed
+analytics. Nikul then implemented the MPI-based execution
+path, including record partitioning across ranks, collective
+input with \texttt{MPI\_File\_open} and \texttt{MPI\_File\_read\_at\_all}, the
+exchange of boundary state needed for correct headway computation, and the global reduction logic that combines local
+statistics into provider-level results. Nikul also contributed to
+debugging and validation by checking that distributed runs
+produced consistent outputs across rank counts, helping verify timing breakdowns, and testing that the communication
+and reduction stages behaved correctly in the final analyzer.
+
+\textbf{Tim Liakh} focused on the GPU and hybrid-execution
+side of the project. During the research and planning phase,
+Tim investigated how the CUDA programming model could
+be applied to the local analytics workload and how a GPU
+backend could be compared fairly against the CPU-only
+MPI baseline. Tim then implemented the CUDA kernels and
+supporting device-memory management needed to process
+local trip partitions on the GPU, including the movement
+of data between host and device and the accumulation of
+local analytics needed for the final reductions. As the project
+moved into evaluation, Tim helped test the CUDA path
+for correctness, compared CPU-versus-GPU behavior, and
+supported the interpretation of the final experimental results
+by identifying where GPU kernel acceleration was helping
+and where fixed runtime overhead was still dominating the
+end-to-end application.
 
 \section{Conclusions and Future Work}
 This project shows that GTFS schedule feeds can be turned into a parallel analytics workload using MPI, MPI-I/O, and CUDA. The binary trip-record representation supports collective shared-file access, the boundary-exchange step keeps headway calculations correct across partitions, and the CUDA path provides a direct comparison against CPU-only MPI. The provider-side results show clear differences in peak concentration, route headways, service span, trip duration, route intensity, and mode composition across MTA, CTA, MBTA, NJ Transit, and SEPTA.
