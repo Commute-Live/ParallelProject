@@ -15,7 +15,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 EXE="${EXE:-$ROOT_DIR/transit-analysis}"
 RANKS=(2 4 8 16)
 BACKENDS=(cpu cuda)
-STRONG_RECORDS="${STRONG_RECORDS:-400000}"
+STRONG_RECORDS="${STRONG_RECORDS:-0}"
 WEAK_RECORDS_PER_RANK="${WEAK_RECORDS_PER_RANK:-150000}"
 
 if [[ ! -x "$EXE" ]]; then
@@ -49,14 +49,21 @@ for backend in "${BACKENDS[@]}"; do
     fi
 
     echo "Running study=$STUDY backend=$backend ranks=$ranks records=$records"
-    mpirun --bind-to core --report-bindings -np "$ranks" \
-      "$EXE" \
-      --input "$INPUT_BIN" \
-      --backend "$backend" \
-      --records "$records" \
-      --csv \
-      "$@" \
-      > "$TMPFILE" 2>&1
+    cmd=(
+      mpirun --bind-to core --report-bindings -np "$ranks"
+      "$EXE"
+      --input "$INPUT_BIN"
+      --backend "$backend"
+      --csv
+    )
+
+    if [[ "$STUDY" != "strong" || "$STRONG_RECORDS" -gt 0 ]]; then
+      cmd+=(--records "$records")
+    fi
+
+    cmd+=("$@")
+
+    "${cmd[@]}" > "$TMPFILE" 2>&1
 
     row="$(grep '^CSVROW,' "$TMPFILE" | tail -n 1 | cut -d',' -f2- || true)"
     if [[ -z "$row" ]]; then

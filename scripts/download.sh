@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-JUMP="PCPGnshm@blp01.ccni.rpi.edu"
-REMOTE="PCPGnshm@dcsfen01"
-REMOTE_DIR="scratch/final_project"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_NAME="final_project"
+JUMP="PCPGlkht@blp01.ccni.rpi.edu"
+REMOTE="PCPGlkht@dcsfen01"
+REMOTE_DIR="scratch/$PROJECT_NAME"
 
-mkdir -p final_project
+scp -O -J "$JUMP" -r "$REMOTE:$REMOTE_DIR/results" "$ROOT_DIR/"
 
-scp -O -J "$JUMP" -r "$REMOTE:$REMOTE_DIR/results" final_project/
-
-echo "Downloaded results into final_project/results"
+echo "Downloaded results into $ROOT_DIR/results"

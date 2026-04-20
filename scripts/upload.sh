@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-JUMP="PCPGnshm@blp01.ccni.rpi.edu"
-REMOTE="PCPGnshm@dcsfen01"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_NAME="final_project"
+JUMP="PCPGNAMEHEREt@blp01.ccni.rpi.edu"
+REMOTE="PCPGNAMEHERE@dcsfen01"
 REMOTE_PARENT="~/scratch"
-DATASET_BIN="final_project/data/processed/transit_trip_records.bin"
-DATASET_MANIFEST="final_project/data/processed/transit_trip_records_manifest.json"
+DATASET_BIN="$ROOT_DIR/data/processed/transit_trip_records.bin"
+DATASET_MANIFEST="$ROOT_DIR/data/processed/transit_trip_records_manifest.json"
 STAGE_ROOT="$(mktemp -d)"
-STAGE_DIR="$STAGE_ROOT/final_project"
+STAGE_DIR="$STAGE_ROOT/$PROJECT_NAME"
 
 cleanup() {
   rm -rf "$STAGE_ROOT"
@@ -26,19 +28,19 @@ fi
 
 mkdir -p "$STAGE_DIR/data/processed" "$STAGE_DIR/results"
 
-cp final_project/Makefile final_project/requirements.txt "$STAGE_DIR/"
+cp "$ROOT_DIR/Makefile" "$ROOT_DIR/requirements.txt" "$STAGE_DIR/"
 
-if [[ -f final_project/README.md ]]; then
-  cp final_project/README.md "$STAGE_DIR/"
+if [[ -f "$ROOT_DIR/README.md" ]]; then
+  cp "$ROOT_DIR/README.md" "$STAGE_DIR/"
 fi
 
-cp -R final_project/config "$STAGE_DIR/"
-cp -R final_project/include "$STAGE_DIR/"
-cp -R final_project/src "$STAGE_DIR/"
-cp -R final_project/scripts "$STAGE_DIR/"
+cp -R "$ROOT_DIR/config" "$STAGE_DIR/"
+cp -R "$ROOT_DIR/include" "$STAGE_DIR/"
+cp -R "$ROOT_DIR/src" "$STAGE_DIR/"
+cp -R "$ROOT_DIR/scripts" "$STAGE_DIR/"
 
-if [[ -d final_project/report ]]; then
-  cp -R final_project/report "$STAGE_DIR/"
+if [[ -d "$ROOT_DIR/report" ]]; then
+  cp -R "$ROOT_DIR/report" "$STAGE_DIR/"
 fi
 
 if [[ "${SKIP_DATASET_UPLOAD:-0}" != "1" && -f "$DATASET_BIN" ]]; then
@@ -51,7 +53,7 @@ echo "Upload complete."
 echo ""
 echo "Next steps on AiMOS:"
 echo "  ssh -J $JUMP $REMOTE"
-echo "  cd ~/scratch/final_project"
+echo "  cd ~/scratch/$PROJECT_NAME"
 echo "  ls -lh data/processed/"
 echo "  cd scripts"
 echo "  sbatch sbatch_summary.sh"
