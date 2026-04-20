@@ -8,7 +8,6 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{siunitx}
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -57,7 +56,7 @@
 \begin{document}
 
 \begin{abstract}
-Public transit agencies publish large General Transit Feed Specification (GTFS) datasets that encode routes, trips, calendars, and stop-level schedules for complex multi-modal systems. Although the format is standardized, large-scale analysis is still cumbersome because even basic questions require joining several files, normalizing hundreds of thousands of records, and aggregating patterns across cities. This project builds a parallel pipeline for multi-city transit schedule analysis using MPI, MPI-I/O, and CUDA on the AiMOS supercomputer. The pipeline downloads GTFS feeds from several northeastern and midwestern providers, converts them into a compact fixed-width binary format, and reads them collectively with \texttt{MPI\_File\_read\_at\_all}. MPI ranks exchange boundary records so headway calculations remain correct across partitions, then reduce provider-level statistics globally. Within each rank, a CUDA kernel computes hourly departures, trip-duration summaries, and headway-related metrics, while a CPU-only MPI backend serves as a baseline. The system produces provider-level summaries of peak-period concentration, scheduled service intensity, bunching, wide-gap frequency, and mode composition, and it reports separate timings for I/O, communication, reduction, and computation under strong-scaling, weak-scaling, and CPU-versus-GPU experiments.
+Public transit agencies publish large General Transit Feed Specification (GTFS) datasets that encode routes, trips, calendars, and stop-level schedules for complex multi-modal systems. Although the format is standardized, large-scale analysis is still cumbersome because even basic questions require joining several files, normalizing large numbers of records, and aggregating patterns across cities. This project builds a parallel pipeline for multi-city transit schedule analysis using MPI, MPI-I/O, and CUDA on the AiMOS supercomputer. The pipeline downloads current and archive-backed GTFS feeds from several northeastern and midwestern providers, converts them into a compact fixed-width binary format, and reads them collectively with \texttt{MPI\_File\_read\_at\_all}. MPI ranks exchange boundary records so headway calculations remain correct across partitions, then reduce provider-level statistics globally. Within each rank, either a CPU-only MPI backend or a CUDA backend computes hourly departures, trip-duration summaries, and headway-related metrics. The resulting dataset contains 3,703,385 trip records across MTA, CTA, MBTA, NJ Transit, and SEPTA. On AiMOS, the CPU path shows useful strong scaling from 50.6\,ms at two ranks to 20.4\,ms at sixteen ranks on the full dataset and reasonably stable weak-scaling behavior as total work increases from 300,000 to 2.4 million records. The GPU kernel scales locally, but end-to-end runtime remains dominated by fixed CUDA overhead, so the hybrid MPI+CUDA path is slower than CPU-only MPI for this workload.
 \end{abstract}
 
 \keywords{HPC, MPI, MPI-I/O, CUDA, GTFS, transit analytics, strong scaling, weak scaling}
@@ -99,23 +98,23 @@ The current dataset covers five provider groups assembled from publicly accessib
   \item SEPTA (Philadelphia).
 \end{itemize}
 
-The preprocessing stage currently produces a consolidated binary dataset of \num{576229} trip records, each exactly 48 bytes. Table~\ref{tab:dataset} summarizes the resulting provider-level record counts and route counts derived during preprocessing.
+The preprocessing stage now produces a consolidated binary dataset of 3,703,385 trip records, each exactly 48 bytes. The larger input comes from combining current feeds with archive-backed schedule snapshots where they were available. Table~\ref{tab:dataset} summarizes the resulting provider-level record counts together with the snapshot-aware route counts derived during preprocessing.
 
 \begin{table}[t]
   \centering
-  \caption{Local GTFS dataset summary after preprocessing.}
+  \caption{Archive-backed GTFS dataset summary after preprocessing. Route counts are snapshot-aware because the dataset includes multiple schedule vintages.}
   \label{tab:dataset}
   \begin{tabular}{lrr}
     \toprule
     \textbf{Provider} & \textbf{Trip Records} & \textbf{Unique Routes} \\
     \midrule
-    MTA & 287,347 & 392 \\
-    CTA & 94,496 & 131 \\
-    MBTA & 121,506 & 374 \\
+    MTA & 1,092,298 & 1,708 \\
+    CTA & 319,822 & 524 \\
+    MBTA & 1,693,567 & 4,419 \\
     NJ Transit & 36,483 & 279 \\
-    SEPTA & 36,397 & 184 \\
+    SEPTA & 561,215 & 2,178 \\
     \midrule
-    Total & 576,229 & 1,360 \\
+    Total & 3,703,385 & 9,108 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -249,13 +248,13 @@ We report this breakdown so we can separate bottlenecks in shared-file access, c
     \toprule
     \textbf{Study} & \textbf{Ranks} & \textbf{Requested Records} \\
     \midrule
-    Strong scaling & 2, 4, 8, 16 & 400,000 fixed \\
+    Strong scaling & 2, 4, 8, 16 & 3,703,385 fixed \\
     Weak scaling & 2, 4, 8, 16 & 150,000 per rank \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-At this point, both the provider-analysis workflow and the AiMOS timing workflow are producing reportable outputs. The provider-analysis figures come from the local GTFS-derived binary dataset, while the timing figures come from the successful AiMOS experiment sweeps recorded in \texttt{experiment\_results.csv}. In the weak-scaling experiments, requested record counts beyond the local dataset size are clamped by the available input, so the largest weak-scaling runs ultimately operate on the full 576,229-record dataset.
+At this point, both the provider-analysis workflow and the AiMOS timing workflow are producing reportable outputs. The provider-analysis figures come from the local archive-backed binary dataset, while the timing figures come from the successful AiMOS experiment sweeps recorded in \texttt{experiment\_results.csv}. The strong-scaling experiments use the full 3,703,385-record dataset. The weak-scaling experiments keep 150,000 records per rank and therefore grow from 300,000 records at two ranks to 2.4 million records at sixteen ranks.
 
 \section{Validation and Limitations}
 \subsection{Validation Strategy}
@@ -268,425 +267,190 @@ Boundary conditions required separate attention because route headways depend on
 \subsection{Current Limitations}
 The main limitation of the current study is that it analyzes scheduled service rather than observed operations. GTFS static feeds describe planned trips, not whether vehicles actually ran on time, whether trips were canceled, or how passenger demand was distributed across the network. As a result, the headway and irregularity metrics in this report should be read as schedule-structure summaries, not as direct reliability measures. A provider may show wide scheduled gaps because it is designed around commuter or regional service, while a dense urban provider may show frequent short scheduled headways without necessarily delivering those headways in practice.
 
-A second limitation is the size of the dataset relative to the GPU overheads on AiMOS. The local analytics kernel does benefit from GPU execution, but the full application remains dominated by fixed costs such as CUDA runtime initialization and host-device transfers. This means the present report captures an important hybrid-programming result, but not yet a case where the GPU wins end-to-end. Larger datasets, repeated analyses over the same resident device data, or heavier local kernels would likely change that balance. The current implementation therefore demonstrates a correct hybrid workflow more clearly than it demonstrates a production-ready acceleration point.
+A second limitation is the way historical coverage is represented. To make the workload larger and more realistic, the preprocessing stage now incorporates archive-backed GTFS snapshots for several providers. That improves computational scale, but the current binary schema does not preserve an explicit snapshot timestamp or materialize trips by service date. In other words, the dataset is richer than a single-feed snapshot, but it still aggregates multiple schedule vintages into one trip-record collection. The provider findings should therefore be interpreted as schedule-structure summaries over the collected snapshots rather than as a single clean service period.
 
-There are also modeling choices in the preprocessing stage that simplify the problem. The binary trip-record representation is intentionally compact and does not preserve every field that might be useful in later analyses. Likewise, route-type normalization is necessary to compare providers cleanly, but it compresses some of the variety present in extended GTFS route codes. These choices are reasonable for the current assignment because they make the distributed analysis simpler and more measurable, but they also limit the granularity of the final provider comparison.
+There are also modeling choices in the preprocessing stage that simplify the problem. The binary trip-record representation is intentionally compact and does not preserve every field that might be useful in later analyses. Likewise, route-type normalization is necessary to compare providers cleanly, but it compresses some of the variety present in extended GTFS route codes. Because the archive-backed dataset includes multiple schedule vintages, route counts in the provider-analysis section are best interpreted as snapshot-aware route keys rather than as a provider's present-day route map.
 
-Finally, the current provider set is broad enough to support comparison but still limited in geographic scope and time horizon. The study covers several major northeastern and midwestern agencies, but it does not yet include a larger national sample, seasonal variation, or historical snapshots over multiple service periods. Expanding the provider set would make the application findings more general, and expanding the time horizon would make the performance study more demanding in exactly the way that could better justify GPU acceleration.
+Finally, the GPU result remains limited by workload shape even after the dataset expansion. The local analytics kernel does benefit from GPU execution, but the full application remains dominated by fixed costs such as CUDA runtime initialization and host-device transfers. This means the present report captures an important hybrid-programming result, but not yet a case where the GPU wins end-to-end. Larger datasets, repeated analyses over resident device data, or heavier local kernels would likely change that balance. The current implementation therefore demonstrates a correct hybrid workflow more clearly than it demonstrates a production-ready acceleration point.
 
 \section{Transit Provider Findings}
 \subsection{Peak vs.\ Off-Peak Concentration}
-Figure~\ref{fig:peakoffpeak} compares the ratio of peak-period trip starts to off-peak trip starts for each provider. We define peak as 7--10 AM and 4--7 PM. NJ Transit shows the largest concentration of service in those windows, with a peak/off-peak ratio of approximately 0.607. The other agencies cluster more tightly around 0.50--0.55. This suggests that NJ Transit is more commuter-peaked, while the urban systems provide relatively more all-day service.
+Figure~\ref{fig:peakoffpeak} compares the ratio of peak-period trip starts to off-peak trip starts for each provider. We define peak as 7--10 AM and 4--7 PM. NJ Transit again shows the largest concentration of service in those windows, with a peak/off-peak ratio of approximately 0.607. MTA follows at 0.551, while CTA, MBTA, and SEPTA cluster near 0.51--0.52. Even after adding archive-backed schedule snapshots, the pattern remains intuitive: NJ Transit is the most commuter-peaked system in the group, while the larger urban systems provide more all-day service.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    width=\columnwidth,
-    height=5.2cm,
-    bar width=12pt,
-    symbolic x coords={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    xtick=data,
-    ylabel={Peak / off-peak ratio},
-    ymin=0,
-    ymax=0.7,
-    nodes near coords,
-    nodes near coords align={vertical},
-    enlarge x limits=0.08
-  ]
-  \addplot[fill=teal!70!black] coordinates {
-    (MTA,0.5482)
-    (CTA,0.5205)
-    (MBTA,0.5094)
-    (NJ Transit,0.6068)
-    (SEPTA,0.5038)
-  };
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_peak_offpeak_ratio.png}
   \caption{Peak/off-peak service ratio by provider, computed from local GTFS trip-start counts.}
   \label{fig:peakoffpeak}
 \end{figure}
 
 \subsection{Hourly Service Profile}
-Figure~\ref{fig:hourlyprofile} shows the hourly trip-start counts for each provider. MTA dominates in absolute service volume throughout the day, which is expected given the number of subfeeds included in the New York provider grouping. The shape of the curves is still informative: all providers show strong morning growth into the 6--8 AM window, a midday plateau, and then a smaller afternoon bump before evening decline. CTA displays the flattest daytime profile among the urban agencies, while NJ Transit drops off more sharply outside peak commuter periods.
+Figure~\ref{fig:hourlyprofile} shows the hourly trip-start counts for each provider. Because the current dataset aggregates archive-backed snapshots, the absolute counts are much larger than in the earlier single-snapshot version of the report, but the shape of the curves is still informative. MTA and MBTA dominate in total scheduled volume, all providers show strong growth into the morning peak, and NJ Transit still drops off more sharply outside commuter windows. The archive-backed data therefore makes the workload larger without changing the broad service-shape story.
 
 \begin{figure*}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    width=0.95\textwidth,
-    height=6.7cm,
-    xlabel={Hour of day},
-    ylabel={Trip starts},
-    xmin=0, xmax=23,
-    xtick={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23},
-    grid=both,
-    grid style={dashed,gray!30},
-    legend style={at={(0.98,0.98)},anchor=north east}
-  ]
-  \addplot+[mark=*] coordinates {
-    (0,5809) (1,4011) (2,2772) (3,2925) (4,4274) (5,8623) (6,14411) (7,17553)
-    (8,16550) (9,14495) (10,13871) (11,13790) (12,14131) (13,14582) (14,15624)
-    (15,16617) (16,18109) (17,18326) (18,16714) (19,14352) (20,12362) (21,10982)
-    (22,9158) (23,7306)
-  };
-  \addlegendentry{MTA}
-  \addplot+[mark=*] coordinates {
-    (0,1357) (1,756) (2,472) (3,723) (4,1711) (5,3250) (6,4622) (7,5371)
-    (8,5429) (9,5149) (10,4983) (11,5006) (12,5081) (13,5252) (14,5696)
-    (15,6026) (16,5891) (17,5527) (18,4983) (19,4480) (20,4194) (21,3567)
-    (22,2928) (23,2042)
-  };
-  \addlegendentry{CTA}
-  \addplot+[mark=*] coordinates {
-    (0,4228) (1,1368) (2,248) (3,183) (4,681) (5,4536) (6,6923) (7,7185)
-    (8,7013) (9,6267) (10,5965) (11,5803) (12,5820) (13,6037) (14,6394)
-    (15,6668) (16,6907) (17,6878) (18,6754) (19,5999) (20,5305) (21,5065)
-    (22,4804) (23,4475)
-  };
-  \addlegendentry{MBTA}
-  \addplot+[mark=*] coordinates {
-    (0,542) (1,246) (2,125) (3,119) (4,358) (5,1239) (6,2090) (7,2403)
-    (8,2286) (9,1995) (10,1872) (11,1819) (12,1834) (13,1901) (14,2044)
-    (15,2266) (16,2479) (17,2447) (18,2168) (19,1763) (20,1422) (21,1232)
-    (22,1054) (23,779)
-  };
-  \addlegendentry{NJ Transit}
-  \addplot+[mark=*] coordinates {
-    (0,831) (1,588) (2,338) (3,330) (4,506) (5,1154) (6,1853) (7,2073)
-    (8,2027) (9,1945) (10,1898) (11,1921) (12,1958) (13,1993) (14,2189)
-    (15,2273) (16,2192) (17,2084) (18,1873) (19,1554) (20,1415) (21,1263)
-    (22,1159) (23,980)
-  };
-  \addlegendentry{SEPTA}
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=0.95\textwidth]{../results/plots/provider_hourly_service_profile.png}
   \caption{Hourly scheduled trip starts by provider.}
   \label{fig:hourlyprofile}
 \end{figure*}
 
 \subsection{Service Span and Overnight Coverage}
-Hourly volume does not show how long each system stays active across the service day. Figure~\ref{fig:servicespan} compares the first scheduled departure and last scheduled arrival in each provider’s GTFS records, measured in service-day hours so trips past midnight remain visible. MBTA and NJ Transit extend furthest into the late-night or early-morning tail, while CTA ends earlier. MTA starts exactly at the beginning of the service day and runs to about hour 28.8. This figure complements the hourly profile by showing overnight coverage directly.
+Hourly volume does not show how long each system stays active across the service day. Figure~\ref{fig:servicespan} compares the first scheduled departure and last scheduled arrival in each provider's GTFS records, measured in service-day hours so trips past midnight remain visible. MBTA and NJ Transit extend furthest into the late-night or early-morning tail, while CTA ends earliest at about hour 25.5. MTA starts at the beginning of the service day and runs to about hour 28.8, while SEPTA reaches nearly hour 27.9. This figure complements the hourly profile by showing overnight coverage directly.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    width=\columnwidth,
-    height=6cm,
-    bar width=7pt,
-    symbolic x coords={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    xtick=data,
-    ylabel={Service-day hour},
-    ymin=0,
-    ymax=31,
-    enlarge x limits=0.08,
-    legend style={at={(0.98,0.98)},anchor=north east}
-  ]
-  \addplot[fill=blue!55!black] coordinates {
-    (MTA,0.00) (CTA,0.00) (MBTA,0.00) (NJ Transit,0.50) (SEPTA,0.10)
-  };
-  \addlegendentry{First trip start}
-  \addplot[fill=blue!85!black] coordinates {
-    (MTA,28.80) (CTA,25.50) (MBTA,29.72) (NJ Transit,29.17) (SEPTA,27.90)
-  };
-  \addlegendentry{Last trip end}
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_service_span.png}
   \caption{Scheduled service span by provider, measured in service-day hours so that overnight trips remain visible.}
   \label{fig:servicespan}
 \end{figure}
 
 \subsection{Headway Distribution}
-Headways separate the providers more clearly than the peak/off-peak ratio alone. Figure~\ref{fig:headwaybox} summarizes mean route headways by provider using quartiles over route-direction groups. CTA and MTA have the smallest median headways, about 3.30 and 4.39 minutes. MBTA’s median is higher at about 5.86 minutes, while SEPTA and especially NJ Transit show much larger values. NJ Transit’s median route headway is about 20.53 minutes, which matches a less frequent regional service pattern.
+Headways separate the providers more clearly than the peak/off-peak ratio alone. Figure~\ref{fig:headwaybox} summarizes mean route headways by provider using quartiles over route-direction groups. CTA and MTA still have the smallest median headways at about 3.89 and 4.37 minutes. MBTA is close behind at 4.66 minutes, while SEPTA rises to 8.84 minutes and NJ Transit remains much larger at 20.53 minutes. The ordering fits the expected split between dense urban service and lower-frequency regional service.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    width=\columnwidth,
-    height=6cm,
-    ylabel={Mean scheduled headway (minutes)},
-    xtick={1,2,3,4,5},
-    xticklabels={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    ymin=0,
-    boxplot/draw direction=y
-  ]
-  \addplot+[
-    boxplot prepared={
-      lower whisker=0.3488, lower quartile=3.1900, median=4.3944, upper quartile=6.7836, upper whisker=97.2222
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=1.2207, lower quartile=2.5088, median=3.3048, upper quartile=5.7627, upper whisker=121.1111
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=0.0, lower quartile=3.1633, median=5.8633, upper quartile=11.2450, upper whisker=152.8571
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=2.5569, lower quartile=13.3784, median=20.5263, upper quartile=31.9429, upper whisker=206.6667
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=0.5, lower quartile=6.8827, median=10.8235, upper quartile=22.0, upper whisker=135.0
-    },
-  ] coordinates {};
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_headway_distribution.png}
   \caption{Distribution of route-level mean scheduled headways by provider.}
   \label{fig:headwaybox}
 \end{figure}
 
 \subsection{Trip Duration Distribution}
-Figure~\ref{fig:durationbox} compares scheduled trip durations derived from GTFS start and end times. MBTA has the lowest median duration at roughly 29 minutes, while MTA, CTA, and NJ Transit cluster near 50 minutes. NJ Transit also has the broadest upper tail, reaching nearly 297 minutes in the maximum observed duration, which is consistent with longer commuter runs. SEPTA sits between the urban systems and the regional systems with a median duration of about 39 minutes.
+Figure~\ref{fig:durationbox} compares scheduled trip durations derived from GTFS start and end times. MBTA still has the lowest average duration at about 30.7 minutes, while MTA and CTA cluster near 50 minutes. NJ Transit remains the longest at 55.6 minutes on average, and SEPTA sits between the urban systems and the regional systems at roughly 41.0 minutes. The relative ranking is stable even after expanding the dataset with archived schedule snapshots.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    width=\columnwidth,
-    height=6cm,
-    ylabel={Scheduled trip duration (minutes)},
-    xtick={1,2,3,4,5},
-    xticklabels={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    ymin=0,
-    boxplot/draw direction=y
-  ]
-  \addplot+[
-    boxplot prepared={
-      lower whisker=1.5, lower quartile=36.0, median=50.0, upper quartile=68.0, upper whisker=198.0
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=1.93, lower quartile=34.0, median=50.5, upper quartile=64.0, upper whisker=138.0
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=0.0, lower quartile=20.0, median=29.0, upper quartile=39.0, upper whisker=240.0
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=4.0, lower quartile=37.0, median=50.0, upper quartile=68.0, upper whisker=297.0
-    },
-  ] coordinates {};
-  \addplot+[
-    boxplot prepared={
-      lower whisker=6.0, lower quartile=29.0, median=39.0, upper quartile=51.0, upper whisker=115.0
-    },
-  ] coordinates {};
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_trip_duration_distribution.png}
   \caption{Distribution of scheduled trip durations by provider.}
   \label{fig:durationbox}
 \end{figure}
 
 \subsection{Mode Composition}
-Figure~\ref{fig:modecomposition} compares provider mode composition using normalized GTFS route types. Bus routes dominate every provider group, but the remaining mix differs. MTA includes subway and commuter rail service, MBTA has the broadest mix with subway, rail, tram, and ferry, and SEPTA is more multimodal than CTA. Those mode differences help explain the headway patterns above.
+Figure~\ref{fig:modecomposition} compares provider mode composition using normalized GTFS route types. Because the current dataset includes archived snapshots, the counts in this figure are snapshot-aware route keys rather than a present-day route map, but the relative mix is still useful. Bus routes dominate every provider group, MTA includes substantial subway and commuter-rail structure, MBTA has the broadest multimodal mix, and SEPTA remains more multimodal than CTA. Those differences help explain the headway patterns above.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    ybar stacked,
-    width=\columnwidth,
-    height=6cm,
-    bar width=10pt,
-    symbolic x coords={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    xtick=data,
-    ylabel={Unique route count},
-    enlarge x limits=0.05,
-    legend style={at={(0.98,0.98)},anchor=north east}
-  ]
-  \addplot+[fill=blue!70!black] coordinates {(MTA,345) (CTA,123) (MBTA,345) (NJ Transit,263) (SEPTA,158)};
-  \addlegendentry{Bus}
-  \addplot+[fill=red!70!black] coordinates {(MTA,28) (CTA,8) (MBTA,3) (NJ Transit,0) (SEPTA,5)};
-  \addlegendentry{Subway}
-  \addplot+[fill=green!60!black] coordinates {(MTA,19) (CTA,0) (MBTA,14) (NJ Transit,13) (SEPTA,13)};
-  \addlegendentry{Rail}
-  \addplot+[fill=purple!65!black] coordinates {(MTA,0) (CTA,0) (MBTA,5) (NJ Transit,3) (SEPTA,8)};
-  \addlegendentry{Tram}
-  \addplot+[fill=orange!80!black] coordinates {(MTA,0) (CTA,0) (MBTA,7) (NJ Transit,0) (SEPTA,0)};
-  \addlegendentry{Ferry}
-  \addplot+[fill=brown!60!black] coordinates {(MTA,0) (CTA,0) (MBTA,0) (NJ Transit,0) (SEPTA,0)};
-  \addlegendentry{Other}
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_mode_composition.png}
   \caption{Provider mode composition after GTFS route-type normalization.}
   \label{fig:modecomposition}
 \end{figure}
 
 \subsection{Route Intensity}
-Absolute route counts can be misleading because a large system may either spread service across many routes or concentrate many trips on fewer corridors. Figure~\ref{fig:routeintensity} therefore normalizes total trip starts by unique route count. MTA and CTA both exceed 720 scheduled trip starts per route in the local dataset snapshot, while MBTA is about 325 and the regional systems are lower. NJ Transit is the least intensive by this measure at roughly 131 trips per route. This metric combines route count with schedule density and helps explain why the urban systems maintain shorter median headways.
+Absolute route counts can be misleading because a large system may either spread service across many routes or concentrate many trips on fewer corridors. Figure~\ref{fig:routeintensity} therefore normalizes total trip starts by unique snapshot-aware route count. MTA and CTA remain the most intensive systems by this measure at roughly 640 and 610 trip starts per route, MBTA is lower at about 383, SEPTA is about 258, and NJ Transit is the least intensive at 131. This metric combines route count with schedule density and helps explain why the urban systems maintain shorter median headways.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    width=\columnwidth,
-    height=5.8cm,
-    bar width=11pt,
-    symbolic x coords={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    xtick=data,
-    ylabel={Trip starts per unique route},
-    ymin=0,
-    enlarge x limits=0.08,
-    nodes near coords,
-    nodes near coords align={vertical}
-  ]
-  \addplot[fill=green!55!black] coordinates {
-    (MTA,733.03)
-    (CTA,721.34)
-    (MBTA,324.88)
-    (NJ Transit,130.76)
-    (SEPTA,197.81)
-  };
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_trips_per_route.png}
   \caption{Scheduled route intensity by provider, defined as trip starts divided by unique route count.}
   \label{fig:routeintensity}
 \end{figure}
 
 \subsection{Headway Irregularity Proxies}
-The parallel analyzer also emits schedule-regularity proxies such as bunch-rate and wide-gap-rate summaries. These are not realtime reliability measures; they only describe how often scheduled headways fall below or above fixed threshold bands. Figure~\ref{fig:irregularity} shows a clear split between dense urban systems and regional systems. MTA, CTA, and MBTA all have high bunch-rate proxies because many route-direction groups operate on short headways. NJ Transit and SEPTA show much larger wide-gap rates, which matches the lower-frequency structure in the headway distributions. This figure also shows that the parallel analytics stage is producing more than simple count summaries.
+The parallel analyzer also emits schedule-regularity proxies such as bunch-rate and wide-gap-rate summaries. These are not realtime reliability measures; they only describe how often scheduled headways fall below or above fixed threshold bands. Figure~\ref{fig:irregularity} shows a clear split between dense urban systems and regional systems. MBTA has the highest bunch-rate proxy at 0.845, followed by MTA and CTA, while NJ Transit remains the most wide-gap-heavy provider at 0.204. SEPTA sits between those extremes, with more gaps than the dense urban systems but much fewer than NJ Transit.
 
 \begin{figure}[t]
   \centering
-  \begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    width=\columnwidth,
-    height=6cm,
-    bar width=7pt,
-    symbolic x coords={MTA,CTA,MBTA,NJ Transit,SEPTA},
-    xtick=data,
-    ylabel={Rate},
-    ymin=0,
-    ymax=0.9,
-    enlarge x limits=0.08,
-    legend style={at={(0.98,0.98)},anchor=north east}
-  ]
-  \addplot[fill=purple!60!black] coordinates {
-    (MTA,0.7790) (CTA,0.8013) (MBTA,0.8189) (NJ Transit,0.3921) (SEPTA,0.4470)
-  };
-  \addlegendentry{Bunch-rate proxy}
-  \addplot[fill=orange!85!black] coordinates {
-    (MTA,0.0175) (CTA,0.0103) (MBTA,0.0418) (NJ Transit,0.2043) (SEPTA,0.1251)
-  };
-  \addlegendentry{Wide-gap proxy}
-  \end{axis}
-  \end{tikzpicture}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_irregularity.png}
   \caption{Schedule irregularity proxies emitted by the parallel analyzer.}
   \label{fig:irregularity}
 \end{figure}
 
 \subsection{Provider Summary}
-Table~\ref{tab:providersummary} collects the main provider-side metrics used in this report. It also serves as a quick sanity check on the preprocessing output.
+Table~\ref{tab:providersummary} collects the main provider-side metrics used in this report. It also serves as a quick sanity check on the preprocessing output and makes it easier to compare the provider narratives above in one place.
 
 \begin{table*}[t]
   \centering
   \caption{Provider-level schedule summary derived from the local binary dataset.}
   \label{tab:providersummary}
+  \small
   \begin{tabular}{lrrrrrrrr}
     \toprule
     \textbf{Provider} & \textbf{Trip Starts} & \textbf{Peak/Off-Peak} & \textbf{Median Headway (min)} & \textbf{Avg Duration (min)} & \textbf{Trips/Route} & \textbf{Service Span (hr)} & \textbf{Unique Routes} & \textbf{Dominant Mode} \\
     \midrule
-    MTA & 287,347 & 0.548 & 4.39 & 53.21 & 733.03 & 0.00--28.80 & 392 & Bus \\
-    CTA & 94,496 & 0.521 & 3.30 & 50.69 & 721.34 & 0.00--25.50 & 131 & Bus \\
-    MBTA & 121,506 & 0.509 & 5.86 & 30.88 & 324.88 & 0.00--29.72 & 374 & Bus \\
+    MTA & 1,092,298 & 0.551 & 4.37 & 50.27 & 639.52 & 0.00--28.80 & 1,708 & Bus \\
+    CTA & 319,822 & 0.521 & 3.89 & 49.62 & 610.35 & 0.00--25.50 & 524 & Bus \\
+    MBTA & 1,693,567 & 0.512 & 4.66 & 30.70 & 383.25 & 0.00--29.72 & 4,419 & Bus \\
     NJ Transit & 36,483 & 0.607 & 20.53 & 55.60 & 130.76 & 0.50--29.17 & 279 & Bus \\
-    SEPTA & 36,397 & 0.504 & 10.82 & 40.62 & 197.81 & 0.10--27.90 & 184 & Bus \\
+    SEPTA & 561,215 & 0.512 & 8.84 & 40.98 & 257.67 & 0.10--27.90 & 2,178 & Bus \\
     \bottomrule
   \end{tabular}
 \end{table*}
 
 \section{Strong Scaling Parallel Performance}
 \label{sec:strong-scaling}
-The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The main result is straightforward: the CUDA kernel is fast, but the end-to-end GPU path is dominated by setup and runtime overhead that the CPU-only MPI baseline does not pay.
+The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The committed strong-scaling sweep completed for the CPU backend on the full archive-backed dataset, so the main question here is how much benefit MPI alone gets from additional ranks when the total workload is fixed at 3,703,385 records.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{strong_scaling_total_time.png}
-  \caption{Strong scaling of the CPU-only MPI backend and the hybrid MPI+CUDA backend.}
+  \includegraphics[width=\columnwidth]{../results/plots/strong_scaling_total_time.png}
+  \caption{Strong scaling of the CPU-only MPI backend on the full archive-backed dataset.}
   \label{fig:strongscaling}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{strong_gpu_speedup.png}
-  \caption{GPU speedup over the CPU-only MPI baseline under strong scaling. Values below 1 indicate that the GPU path is slower end-to-end than the CPU path.}
+  \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_speedup.png}
+  \caption{CPU strong-scaling speedup relative to the two-rank run.}
   \label{fig:strongspeedup}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{strong_cuda_breakdown.png}
-  \caption{Strong-scaling runtime breakdown for the hybrid MPI+CUDA backend.}
+  \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_breakdown.png}
+  \caption{Strong-scaling runtime breakdown for the CPU-only MPI backend.}
   \label{fig:strongbreakdown}
 \end{figure}
 
-The strong-scaling study fixes the total record count at 400,000 records and increases the number of MPI ranks. The CPU-only MPI backend improves from approximately 7.27 ms at two ranks to 4.98 ms at sixteen ranks, which is modest but directionally correct strong scaling. The CUDA backend behaves differently: while the measured GPU compute time decreases from roughly 5.63 ms to 0.93 ms as ranks increase, the \emph{total} runtime remains near 0.47--0.49 s for 4--16 ranks and is already 0.296 s at two ranks. This means that the GPU kernel itself is not the bottleneck; instead, fixed GPU overhead dominates the full runtime.
+The strong-scaling study fixes the total record count at 3,703,385 records and increases the number of MPI ranks. The CPU-only MPI backend improves from 50.6\,ms at two ranks to 26.2\,ms at four ranks, 24.8\,ms at eight ranks, and 20.4\,ms at sixteen ranks. That is not ideal linear scaling, but it is still useful: the sixteen-rank run is about 2.48$\times$ faster than the two-rank run on the same full dataset.
 
-Figures~\ref{fig:strongscaling}--\ref{fig:strongbreakdown} show the same pattern. The GPU speedup curve stays well below 1 because total wall-clock time includes CUDA initialization, device setup, host-to-device copies, device-to-host copies, and synchronization. Those costs do not appear in the explicit \texttt{compute\_seconds} counter alone. The GPU speeds up the local kernel, but not the full application.
+Figures~\ref{fig:strongscaling}--\ref{fig:strongbreakdown} show why the gains flatten. The local compute phase drops sharply from 20.2\,ms at two ranks to 3.49\,ms at sixteen ranks, but the I/O component stays in the 11--28\,ms range and therefore becomes a larger fraction of the total runtime. Boundary exchange and reduction remain negligible. In other words, the CPU backend does benefit from more ranks, but the shared-file read and other fixed costs keep the scaling curve from being dramatic.
 
 \section{Weak Scaling Parallel Performance}
 \label{sec:weak-scaling}
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{weak_scaling_total_time.png}
+  \includegraphics[width=\columnwidth]{../results/plots/weak_scaling_total_time.png}
   \caption{Weak scaling of the CPU-only MPI backend and the hybrid MPI+CUDA backend.}
   \label{fig:weakscaling}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{weak_gpu_speedup.png}
+  \includegraphics[width=\columnwidth]{../results/plots/weak_gpu_speedup.png}
   \caption{GPU speedup over the CPU-only MPI baseline under weak scaling.}
   \label{fig:weakspeedup}
 \end{figure}
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{weak_cuda_breakdown.png}
+  \includegraphics[width=\columnwidth]{../results/plots/weak_cuda_breakdown.png}
   \caption{Weak-scaling runtime breakdown for the hybrid MPI+CUDA backend.}
   \label{fig:weakbreakdown}
 \end{figure}
 
-The weak-scaling study fixes the records per rank and increases the total workload with the number of MPI ranks. In the successful runs, the CPU backend remains in a narrow band from 6.84 ms at two ranks to 5.12 ms at sixteen ranks, which is reasonably close to ideal weak scaling given that the total record count grows from 300,000 to the full 576,229 records available in the dataset. The CUDA backend again shows a nearly flat total runtime near 0.47--0.49 s for 4--16 ranks, with a smaller 0.299 s runtime at two ranks. As in strong scaling, the local GPU compute time decreases with more ranks, but the total runtime does not improve because the fixed GPU-side overhead dominates.
+The weak-scaling study fixes the records per rank and increases the total workload with the number of MPI ranks. In the successful runs, the CPU backend grows from 10.6\,ms at 300,000 records and two ranks to 15.3\,ms at 2.4 million records and sixteen ranks. That is a modest increase in runtime for an 8$\times$ increase in total work, so the weak-scaling behavior is reasonably good for the CPU path.
 
-The weak-scaling plots reinforce the strong-scaling result: the implementation runs correctly in hybrid mode, but the end-to-end CUDA path is still overhead-bound. For this workload size, GPU setup and transfer costs dominate the short local compute phase.
+The CUDA backend behaves differently. Its weak-scaling runtime grows from 0.292\,s at two ranks to about 0.488\,s at sixteen ranks, and it remains far slower than the CPU baseline at every scale. As in the earlier experiments, the local GPU compute phase is only a few milliseconds, but the end-to-end application is still dominated by fixed CUDA overhead. The weak-scaling plots therefore reinforce the same architectural lesson as the summary run: the hybrid MPI+CUDA path is correct, but it is still overhead-bound for this workload.
 
 \section{Analysis of Performance Results}
 \Needspace{14\baselineskip}
 The measured results make the dominant bottlenecks clearer than the original design-level expectations:
 \begin{itemize}[leftmargin=*]
   \item \textbf{CUDA runtime overhead dominates total time.} The measured GPU compute phase is only a few milliseconds, but total application time is hundreds of milliseconds, implying that device setup and transfer overhead are the primary bottleneck.
-  \item \textbf{MPI-I/O is not the main limiter in these runs.} The measured I/O times are on the order of 0.5--3.2 ms, which is small relative to GPU total runtime and comparable to or slightly larger than the CPU local compute phase.
+  \item \textbf{MPI-I/O matters more after the dataset expansion.} On the full strong-scaling runs, I/O stays in the 11--28\,ms range and becomes a meaningful fraction of the total time even though it is still much smaller than the GPU end-to-end overhead.
   \item \textbf{Boundary exchange and reduction are negligible at current scale.} Both remain in the microsecond range, so they do not dominate either backend in the present dataset size.
-  \item \textbf{The CPU baseline is strong because the local workload is modest.} With at most 576,229 records total, the host-side loops are inexpensive enough that GPU acceleration cannot amortize its fixed costs.
+  \item \textbf{The CPU baseline remains strong even on the larger dataset.} With 3,703,385 records total, the host-side loops are still inexpensive enough that GPU acceleration cannot amortize its fixed costs.
 \end{itemize}
 
 The main performance lesson is architectural. A hybrid MPI+CUDA design is not automatically faster than MPI on CPUs; it becomes faster only when the local compute intensity is high enough to amortize the GPU’s fixed runtime costs. In the current implementation, that threshold has not been reached, so the GPU path is slower end-to-end even though the local kernel scales in the expected direction.
 
 \section{Discussion}
-The provider-level analytics show why this application is worth parallelizing. Even after preprocessing, the dataset still contains more than half a million trip records across multiple systems. The New York provider grouping alone contributes nearly 300,000 trips and several operating modes. A single local pass is manageable, but repeated parameter sweeps, additional providers, or GTFS-Realtime integration would push the workload much further.
+The provider-level analytics show why this application is worth parallelizing. After adding archive-backed schedule snapshots, the dataset now contains more than 3.7 million trip records across five systems. New York contributes about 1.09 million records, Boston about 1.69 million, and Philadelphia about 561,000. A single local pass is still manageable, but the larger dataset makes the experimental results more defensible and gives the shared-file and reduction stages enough work to show up clearly in the timing breakdown.
 
-The provider findings also line up with the service patterns one would expect. NJ Transit is the most peak-concentrated and the most headway-sparse among the providers studied here, which fits a commuter-oriented system. CTA and MTA have the shortest route-level median headways, consistent with dense urban service. MBTA’s mode mix is broader than CTA’s and includes ferry routes, while SEPTA falls between MBTA and NJ Transit in median route headway. These are schedule-based findings, not passenger-based conclusions, but they still give a useful cross-city picture.
+The provider findings also line up with the service patterns one would expect. NJ Transit is still the most peak-concentrated and the most headway-sparse among the providers studied here, which fits a commuter-oriented system. CTA and MTA have the shortest route-level median headways, consistent with dense urban service, while SEPTA sits between those urban systems and NJ Transit. MBTA remains the shortest-duration system on average and also shows the highest bunch-rate proxy in the current aggregated schedule dataset. These are schedule-based findings, not passenger-based conclusions, but they still give a useful cross-city picture.
 
 One practical lesson from the data-engineering stage is that publicly available GTFS feeds are cleaner in schema than in packaging. Missing \texttt{calendar.txt} files, nested archives, and extended route-type codes all had to be handled explicitly before the HPC work could begin. That preprocessing burden is easy to skip over in an algorithm sketch, but it matters in a system built on real feeds.
 
-Another lesson is that no single metric is enough. Peak/off-peak ratios alone make the agencies look fairly similar, but route intensity, service span, and trip-duration distributions separate them more clearly. MTA and CTA are both high-intensity systems by trips per route, yet MTA keeps that intensity across a longer service-day span. MBTA has a broader mode mix and a shorter median trip duration than the commuter-oriented providers. NJ Transit’s peak concentration is easier to interpret when paired with its longer durations, larger headways, lower route intensity, and higher wide-gap rate.
+Another lesson is that no single metric is enough. Peak/off-peak ratios alone make the agencies look fairly similar, but route intensity, service span, headway distributions, and irregularity proxies separate them more clearly. MTA and CTA are both high-intensity systems by trips per route, yet MTA keeps that intensity across a longer service-day span. MBTA has a much shorter average trip duration than the commuter-oriented providers, while NJ Transit's peak concentration is easier to interpret when paired with its longer durations, larger headways, lower route intensity, and much higher wide-gap rate.
 
 \section{Team Contributions}
 \textbf{Shimu Pan} led the project from the data and report side.
@@ -699,7 +463,7 @@ dataset-construction pipeline that converts raw GTFS feeds
 into the fixed-width binary trip-record format used by the
 analyzer. This work included handling real feed irregularities
 such as missing \texttt{calendar.txt} files, nested archives, and
-extended route-type values, as well as validating that the resulting provider summaries were plausible. In the later stages
+extended route-type values, archive-backed feed acquisition, and nested SEPTA release packaging, as well as validating that the resulting provider summaries were plausible. In the later stages
 of the project, Shimu ran AiMOS experiments, collected and
 organized timing outputs, generated the figures used in the
 report, and integrated the final written report, including the
@@ -738,9 +502,9 @@ and where fixed runtime overhead was still dominating the
 end-to-end application.
 
 \section{Conclusions and Future Work}
-This project shows that GTFS schedule feeds can be turned into a parallel analytics workload using MPI, MPI-I/O, and CUDA. The binary trip-record representation supports collective shared-file access, the boundary-exchange step keeps headway calculations correct across partitions, and the CUDA path provides a direct comparison against CPU-only MPI. The provider-side results show clear differences in peak concentration, route headways, service span, trip duration, route intensity, and mode composition across MTA, CTA, MBTA, NJ Transit, and SEPTA.
+This project shows that GTFS schedule feeds can be turned into a parallel analytics workload using MPI, MPI-I/O, and CUDA. The binary trip-record representation supports collective shared-file access, the boundary-exchange step keeps headway calculations correct across partitions, and the CUDA path provides a direct comparison against CPU-only MPI. The provider-side results show clear differences in peak concentration, route headways, service span, trip duration, route intensity, and mode composition across MTA, CTA, MBTA, NJ Transit, and SEPTA, even after the dataset was expanded with archive-backed schedule snapshots.
 
-The completed AiMOS timing study produced a clear result. The MPI+CUDA path runs correctly and its local kernel time scales in the expected direction, but the full application is still slower than CPU-only MPI because the problem size is too small to amortize GPU initialization and transfer overhead. In this version of the workload, the GPU helps the kernel and hurts the total runtime.
+The completed AiMOS timing study produced a clear result. On the 3,703,385-record full dataset, the CPU-only MPI backend improved from 50.6\,ms at two ranks to 20.4\,ms at sixteen ranks, and the weak-scaling runs stayed in a narrow 10.6--15.3\,ms band while total work increased from 300,000 to 2.4 million records. The MPI+CUDA path runs correctly and its local kernel time scales in the expected direction, but the full application is still slower than CPU-only MPI because GPU initialization and transfer overhead dominate the end-to-end runtime. In this version of the workload, the GPU helps the kernel and hurts the total runtime.
 
 Beyond the current prototype, the most promising extensions are:
 \begin{itemize}[leftmargin=*]
