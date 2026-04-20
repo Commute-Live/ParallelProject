@@ -11,6 +11,7 @@
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{float}
 \usepackage{needspace}
 \usepackage{pgfplots}
 \usepgfplotslibrary{statistics}
@@ -147,9 +148,7 @@ These two question sets are linked. Faster analysis makes it easier to compare p
 
 \section{Parallel Algorithm - CUDA and MPI}
 \subsection{Pipeline Overview}
-Figure~\ref{fig:pipeline} shows the end-to-end workflow.
-
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \fbox{\parbox{0.95\columnwidth}{
     \textbf{Pipeline:} GTFS download $\rightarrow$ preprocessing into fixed-width binary records $\rightarrow$ collective MPI-I/O read $\rightarrow$ rank-boundary exchange $\rightarrow$ CPU or CUDA local analytics $\rightarrow$ MPI reduction $\rightarrow$ provider-level summaries and performance reports.
@@ -157,6 +156,8 @@ Figure~\ref{fig:pipeline} shows the end-to-end workflow.
   \caption{High-level workflow implemented in this project.}
   \label{fig:pipeline}
 \end{figure}
+
+Figure~\ref{fig:pipeline} shows the end-to-end workflow.
 
 \subsection{Preprocessing}
 The preprocessing stage is implemented in Python. It reads \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, and calendar metadata and then derives one record per trip. During implementation, several real-world GTFS packaging differences had to be handled explicitly:
@@ -275,84 +276,84 @@ Finally, the GPU result remains limited by workload shape even after the dataset
 
 \section{Transit Provider Findings}
 \subsection{Peak vs.\ Off-Peak Concentration}
-Figure~\ref{fig:peakoffpeak} compares the ratio of peak-period trip starts to off-peak trip starts for each provider. We define peak as 7--10 AM and 4--7 PM. NJ Transit again shows the largest concentration of service in those windows, with a peak/off-peak ratio of approximately 0.607. MTA follows at 0.551, while CTA, MBTA, and SEPTA cluster near 0.51--0.52. Even after adding archive-backed schedule snapshots, the pattern remains intuitive: NJ Transit is the most commuter-peaked system in the group, while the larger urban systems provide more all-day service.
-
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_peak_offpeak_ratio.png}
   \caption{Peak/off-peak service ratio by provider, computed from local GTFS trip-start counts.}
   \label{fig:peakoffpeak}
 \end{figure}
 
-\subsection{Hourly Service Profile}
-Figure~\ref{fig:hourlyprofile} shows the hourly trip-start counts for each provider. Because the current dataset aggregates archive-backed snapshots, the absolute counts are much larger than in the earlier single-snapshot version of the report, but the shape of the curves is still informative. MTA and MBTA dominate in total scheduled volume, all providers show strong growth into the morning peak, and NJ Transit still drops off more sharply outside commuter windows. The archive-backed data therefore makes the workload larger without changing the broad service-shape story.
+Figure~\ref{fig:peakoffpeak} compares the ratio of peak-period trip starts to off-peak trip starts for each provider. We define peak as 7--10 AM and 4--7 PM. NJ Transit again shows the largest concentration of service in those windows, with a peak/off-peak ratio of approximately 0.607. MTA follows at 0.551, while CTA, MBTA, and SEPTA cluster near 0.51--0.52. Even after adding archive-backed schedule snapshots, the pattern remains intuitive: NJ Transit is the most commuter-peaked system in the group, while the larger urban systems provide more all-day service.
 
-\begin{figure*}[t]
+\subsection{Hourly Service Profile}
+\begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{../results/plots/provider_hourly_service_profile.png}
+  \includegraphics[width=\columnwidth]{../results/plots/provider_hourly_service_profile.png}
   \caption{Hourly scheduled trip starts by provider.}
   \label{fig:hourlyprofile}
-\end{figure*}
+\end{figure}
+
+Figure~\ref{fig:hourlyprofile} shows the hourly trip-start counts for each provider. Because the current dataset aggregates archive-backed snapshots, the absolute counts are much larger than in the earlier single-snapshot version of the report, but the shape of the curves is still informative. MTA and MBTA dominate in total scheduled volume, all providers show strong growth into the morning peak, and NJ Transit still drops off more sharply outside commuter windows. The archive-backed data therefore makes the workload larger without changing the broad service-shape story.
 
 \subsection{Service Span and Overnight Coverage}
-Hourly volume does not show how long each system stays active across the service day. Figure~\ref{fig:servicespan} compares the first scheduled departure and last scheduled arrival in each provider's GTFS records, measured in service-day hours so trips past midnight remain visible. MBTA and NJ Transit extend furthest into the late-night or early-morning tail, while CTA ends earliest at about hour 25.5. MTA starts at the beginning of the service day and runs to about hour 28.8, while SEPTA reaches nearly hour 27.9. This figure complements the hourly profile by showing overnight coverage directly.
-
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_service_span.png}
   \caption{Scheduled service span by provider, measured in service-day hours so that overnight trips remain visible.}
   \label{fig:servicespan}
 \end{figure}
 
-\subsection{Headway Distribution}
-Headways separate the providers more clearly than the peak/off-peak ratio alone. Figure~\ref{fig:headwaybox} summarizes mean route headways by provider using quartiles over route-direction groups. CTA and MTA still have the smallest median headways at about 3.89 and 4.37 minutes. MBTA is close behind at 4.66 minutes, while SEPTA rises to 8.84 minutes and NJ Transit remains much larger at 20.53 minutes. The ordering fits the expected split between dense urban service and lower-frequency regional service.
+Hourly volume does not show how long each system stays active across the service day. Figure~\ref{fig:servicespan} compares the first scheduled departure and last scheduled arrival in each provider's GTFS records, measured in service-day hours so trips past midnight remain visible. MBTA and NJ Transit extend furthest into the late-night or early-morning tail, while CTA ends earliest at about hour 25.5. MTA starts at the beginning of the service day and runs to about hour 28.8, while SEPTA reaches nearly hour 27.9. This figure complements the hourly profile by showing overnight coverage directly.
 
-\begin{figure}[t]
+\subsection{Headway Distribution}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_headway_distribution.png}
   \caption{Distribution of route-level mean scheduled headways by provider.}
   \label{fig:headwaybox}
 \end{figure}
 
-\subsection{Trip Duration Distribution}
-Figure~\ref{fig:durationbox} compares scheduled trip durations derived from GTFS start and end times. MBTA still has the lowest average duration at about 30.7 minutes, while MTA and CTA cluster near 50 minutes. NJ Transit remains the longest at 55.6 minutes on average, and SEPTA sits between the urban systems and the regional systems at roughly 41.0 minutes. The relative ranking is stable even after expanding the dataset with archived schedule snapshots.
+Headways separate the providers more clearly than the peak/off-peak ratio alone. Figure~\ref{fig:headwaybox} summarizes mean route headways by provider using quartiles over route-direction groups. CTA and MTA still have the smallest median headways at about 3.89 and 4.37 minutes. MBTA is close behind at 4.66 minutes, while SEPTA rises to 8.84 minutes and NJ Transit remains much larger at 20.53 minutes. The ordering fits the expected split between dense urban service and lower-frequency regional service.
 
-\begin{figure}[t]
+\subsection{Trip Duration Distribution}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_trip_duration_distribution.png}
   \caption{Distribution of scheduled trip durations by provider.}
   \label{fig:durationbox}
 \end{figure}
 
-\subsection{Mode Composition}
-Figure~\ref{fig:modecomposition} compares provider mode composition using normalized GTFS route types. Because the current dataset includes archived snapshots, the counts in this figure are snapshot-aware route keys rather than a present-day route map, but the relative mix is still useful. Bus routes dominate every provider group, MTA includes substantial subway and commuter-rail structure, MBTA has the broadest multimodal mix, and SEPTA remains more multimodal than CTA. Those differences help explain the headway patterns above.
+Figure~\ref{fig:durationbox} compares scheduled trip durations derived from GTFS start and end times. MBTA still has the lowest average duration at about 30.7 minutes, while MTA and CTA cluster near 50 minutes. NJ Transit remains the longest at 55.6 minutes on average, and SEPTA sits between the urban systems and the regional systems at roughly 41.0 minutes. The relative ranking is stable even after expanding the dataset with archived schedule snapshots.
 
-\begin{figure}[t]
+\subsection{Mode Composition}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_mode_composition.png}
   \caption{Provider mode composition after GTFS route-type normalization.}
   \label{fig:modecomposition}
 \end{figure}
 
-\subsection{Route Intensity}
-Absolute route counts can be misleading because a large system may either spread service across many routes or concentrate many trips on fewer corridors. Figure~\ref{fig:routeintensity} therefore normalizes total trip starts by unique snapshot-aware route count. MTA and CTA remain the most intensive systems by this measure at roughly 640 and 610 trip starts per route, MBTA is lower at about 383, SEPTA is about 258, and NJ Transit is the least intensive at 131. This metric combines route count with schedule density and helps explain why the urban systems maintain shorter median headways.
+Figure~\ref{fig:modecomposition} compares provider mode composition using normalized GTFS route types. Because the current dataset includes archived snapshots, the counts in this figure are snapshot-aware route keys rather than a present-day route map, but the relative mix is still useful. Bus routes dominate every provider group, MTA includes substantial subway and commuter-rail structure, MBTA has the broadest multimodal mix, and SEPTA remains more multimodal than CTA. Those differences help explain the headway patterns above.
 
-\begin{figure}[t]
+\subsection{Route Intensity}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_trips_per_route.png}
   \caption{Scheduled route intensity by provider, defined as trip starts divided by unique route count.}
   \label{fig:routeintensity}
 \end{figure}
 
-\subsection{Headway Irregularity Proxies}
-The parallel analyzer also emits schedule-regularity proxies such as bunch-rate and wide-gap-rate summaries. These are not realtime reliability measures; they only describe how often scheduled headways fall below or above fixed threshold bands. Figure~\ref{fig:irregularity} shows a clear split between dense urban systems and regional systems. MBTA has the highest bunch-rate proxy at 0.845, followed by MTA and CTA, while NJ Transit remains the most wide-gap-heavy provider at 0.204. SEPTA sits between those extremes, with more gaps than the dense urban systems but much fewer than NJ Transit.
+Absolute route counts can be misleading because a large system may either spread service across many routes or concentrate many trips on fewer corridors. Figure~\ref{fig:routeintensity} therefore normalizes total trip starts by unique snapshot-aware route count. MTA and CTA remain the most intensive systems by this measure at roughly 640 and 610 trip starts per route, MBTA is lower at about 383, SEPTA is about 258, and NJ Transit is the least intensive at 131. This metric combines route count with schedule density and helps explain why the urban systems maintain shorter median headways.
 
-\begin{figure}[t]
+\subsection{Headway Irregularity Proxies}
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/provider_irregularity.png}
   \caption{Schedule irregularity proxies emitted by the parallel analyzer.}
   \label{fig:irregularity}
 \end{figure}
+
+The parallel analyzer also emits schedule-regularity proxies such as bunch-rate and wide-gap-rate summaries. These are not realtime reliability measures; they only describe how often scheduled headways fall below or above fixed threshold bands. Figure~\ref{fig:irregularity} shows a clear split between dense urban systems and regional systems. MBTA has the highest bunch-rate proxy at 0.845, followed by MTA and CTA, while NJ Transit remains the most wide-gap-heavy provider at 0.204. SEPTA sits between those extremes, with more gaps than the dense urban systems but much fewer than NJ Transit.
 
 \subsection{Provider Summary}
 Table~\ref{tab:providersummary} collects the main provider-side metrics used in this report. It also serves as a quick sanity check on the preprocessing output and makes it easier to compare the provider narratives above in one place.
@@ -379,21 +380,21 @@ Table~\ref{tab:providersummary} collects the main provider-side metrics used in 
 \label{sec:strong-scaling}
 The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The committed strong-scaling sweep completed for the CPU backend on the full archive-backed dataset, so the main question here is how much benefit MPI alone gets from additional ranks when the total workload is fixed at 3,703,385 records.
 
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_scaling_total_time.png}
   \caption{Strong scaling of the CPU-only MPI backend on the full archive-backed dataset.}
   \label{fig:strongscaling}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_speedup.png}
   \caption{CPU strong-scaling speedup relative to the two-rank run.}
   \label{fig:strongspeedup}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_breakdown.png}
   \caption{Strong-scaling runtime breakdown for the CPU-only MPI backend.}
@@ -406,21 +407,21 @@ Figures~\ref{fig:strongscaling}--\ref{fig:strongbreakdown} show why the gains fl
 
 \section{Weak Scaling Parallel Performance}
 \label{sec:weak-scaling}
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_scaling_total_time.png}
   \caption{Weak scaling of the CPU-only MPI backend and the hybrid MPI+CUDA backend.}
   \label{fig:weakscaling}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_gpu_speedup.png}
   \caption{GPU speedup over the CPU-only MPI baseline under weak scaling.}
   \label{fig:weakspeedup}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_cuda_breakdown.png}
   \caption{Weak-scaling runtime breakdown for the hybrid MPI+CUDA backend.}

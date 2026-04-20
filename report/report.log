@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -993,7 +993,7 @@ File: pgflibraryplotmarks.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
 (/usr/local/texlive/2026basic/texmf-dist/tex/generic/pgfplots/libs/tikzlibraryp
 gfplots.statistics.code.tex)
-Package hyperref Info: Option `pdfdisplaydoctitle' set `true' on input line 56.
+Package hyperref Info: Option `pdfdisplaydoctitle' set `true' on input line 57.
 
 \c@theorem=\count368
 
@@ -1010,44 +1010,44 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 56.
-LaTeX Font Info:    ... okay on input line 56.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
 <<ot1.cmap>><<oml.cmap>><<oms.cmap>><<omx.cmap>>
-LaTeX Font Info:    Trying to load font information for U+msa on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
 
 
 (/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 56.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
 
 
 (/usr/local/texlive/2026basic/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Info: Redefining \microtypecontext on input line 56.
-Package microtype Info: Applying patch `item' on input line 56.
-Package microtype Info: Applying patch `toc' on input line 56.
-Package microtype Info: Applying patch `eqnum' on input line 56.
-Package microtype Info: Applying patch `footnote' on input line 56.
-Package microtype Info: Applying patch `verbatim' on input line 56.
-LaTeX Info: Redefining \microtypesetup on input line 56.
+LaTeX Info: Redefining \microtypecontext on input line 57.
+Package microtype Info: Applying patch `item' on input line 57.
+Package microtype Info: Applying patch `toc' on input line 57.
+Package microtype Info: Applying patch `eqnum' on input line 57.
+Package microtype Info: Applying patch `footnote' on input line 57.
+Package microtype Info: Applying patch `verbatim' on input line 57.
+LaTeX Info: Redefining \microtypesetup on input line 57.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1063,7 +1063,7 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-Package hyperref Info: Link coloring OFF on input line 56.
+Package hyperref Info: Link coloring OFF on input line 57.
 
 (./report.out) (./report.out)
 \@outlinefile=\write5
@@ -1153,26 +1153,26 @@ Underfull \vbox (badness 5832) has occurred while \output is active []
 Underfull \vbox (badness 1867) has occurred while \output is active []
 
 
-Overfull \hbox (53.36943pt too wide) in paragraph at lines 126--129
+Overfull \hbox (53.36943pt too wide) in paragraph at lines 127--130
 []\OT1/cmtt/m/n/8 (city[]id, feed[]id, route[]type, route[]hash, service[]mask,
  
  []
 
 
-Overfull \hbox (27.35907pt too wide) in paragraph at lines 126--129
+Overfull \hbox (27.35907pt too wide) in paragraph at lines 127--130
 \OT1/cmtt/m/n/8 direction[]id, start[]secs, end[]secs, duration[]secs,
  []
 
 
-Overfull \hbox (14.18388pt too wide) in paragraph at lines 135--136
+Overfull \hbox (14.18388pt too wide) in paragraph at lines 136--137
 []\OT1/cmtt/m/n/8 (city[]id, route[]hash, direction[]id, start[]secs,
  []
 
 
-Class acmart Warning: A possible image without description on input line 159.
+Class acmart Warning: A possible image without description on input line 158.
 
 
-Overfull \hbox (12.98026pt too wide) in paragraph at lines 164--165
+Overfull \hbox (12.98026pt too wide) in paragraph at lines 165--166
 []\OT1/cmr/m/n/9 (-20) some feeds in-clude \OT1/cmtt/m/n/9 calendar[]dates.txt 
 \OT1/cmr/m/n/9 (-20) but no \OT1/cmtt/m/n/9 calendar.txt\OT1/cmr/m/n/9 (-20) ; 
 
@@ -1180,197 +1180,199 @@ Overfull \hbox (12.98026pt too wide) in paragraph at lines 164--165
 
 [2.2]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 188.
+put line 189.
 
-Overfull \hbox (4.33894pt too wide) in paragraph at lines 217--218
+Overfull \hbox (4.33894pt too wide) in paragraph at lines 218--219
 \OT1/cmr/m/n/9 (-20) Because the lo-cal ar-rays must be com-bined to pro-duce p
 rovider-
  []
 
 
-Overfull \hbox (54.40256pt too wide) in paragraph at lines 257--258
+Overfull \hbox (54.40256pt too wide) in paragraph at lines 258--259
 \OT1/cmr/m/n/9 (-20) suc-cess-ful AiMOS ex-per-i-ment sweeps recorded in \OT1/c
 mtt/m/n/9 experiment[]results.csv\OT1/cmr/m/n/9 (-20) .
  []
 
 [3.3]
-<../results/plots/provider_peak_offpeak_ratio.png, id=221, 578.16pt x 361.35pt>
+<../results/plots/provider_peak_offpeak_ratio.png, id=220, 578.16pt x 361.35pt>
 
 File: ../results/plots/provider_peak_offpeak_ratio.png Graphic file (type png)
 <use ../results/plots/provider_peak_offpeak_ratio.png>
 Package pdftex.def Info: ../results/plots/provider_peak_offpeak_ratio.png  used
- on input line 282.
+ on input line 281.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
 
-Class acmart Warning: A possible image without description on input line 285.
+Class acmart Warning: A possible image without description on input line 284.
 
-<../results/plots/provider_hourly_service_profile.png, id=224, 867.24pt x 433.6
+[4.4 <../results/plots/provider_peak_offpeak_ratio.png>]
+<../results/plots/provider_hourly_service_profile.png, id=229, 867.24pt x 433.6
 2pt>
 File: ../results/plots/provider_hourly_service_profile.png Graphic file (type p
 ng)
 <use ../results/plots/provider_hourly_service_profile.png>
 Package pdftex.def Info: ../results/plots/provider_hourly_service_profile.png  
-used on input line 292.
-(pdftex.def)             Requested size: 480.9787pt x 240.48991pt.
-
-Class acmart Warning: A possible image without description on input line 295.
+used on input line 291.
+(pdftex.def)             Requested size: 241.14749pt x 120.57246pt.
 
 
-Underfull \vbox (badness 5533) has occurred while \output is active []
+Class acmart Warning: A possible image without description on input line 294.
 
- [4.4]
-<../results/plots/provider_service_span.png, id=232, 722.7pt x 397.485pt>
+<../results/plots/provider_service_span.png, id=231, 722.7pt x 397.485pt>
 File: ../results/plots/provider_service_span.png Graphic file (type png)
 <use ../results/plots/provider_service_span.png>
 Package pdftex.def Info: ../results/plots/provider_service_span.png  used on in
-put line 302.
+put line 301.
 (pdftex.def)             Requested size: 241.14749pt x 132.63214pt.
 
+Class acmart Warning: A possible image without description on input line 304.
 
-Class acmart Warning: A possible image without description on input line 305.
-
-
-Overfull \hbox (7.19455pt too wide) in paragraph at lines 308--309
-\OT1/cmr/m/n/9 (-20) Headways sep-a-rate the providers more clearly than the pe
-ak/off-
- []
-
-<../results/plots/provider_headway_distribution.png, id=234, 722.7pt x 397.485p
+<../results/plots/provider_headway_distribution.png, id=233, 722.7pt x 397.485p
 t>
 File: ../results/plots/provider_headway_distribution.png Graphic file (type png
 )
 <use ../results/plots/provider_headway_distribution.png>
 Package pdftex.def Info: ../results/plots/provider_headway_distribution.png  us
-ed on input line 312.
+ed on input line 311.
 (pdftex.def)             Requested size: 241.14749pt x 132.63214pt.
 
-Class acmart Warning: A possible image without description on input line 315.
+Class acmart Warning: A possible image without description on input line 314.
 
-<../results/plots/provider_trip_duration_distribution.png, id=236, 722.7pt x 39
+
+Overfull \hbox (7.19455pt too wide) in paragraph at lines 316--317
+\OT1/cmr/m/n/9 (-20) Headways sep-a-rate the providers more clearly than the pe
+ak/off-
+ []
+
+<../results/plots/provider_trip_duration_distribution.png, id=235, 722.7pt x 39
 7.485pt>
 File: ../results/plots/provider_trip_duration_distribution.png Graphic file (ty
 pe png)
 <use ../results/plots/provider_trip_duration_distribution.png>
 Package pdftex.def Info: ../results/plots/provider_trip_duration_distribution.p
-ng  used on input line 322.
+ng  used on input line 321.
 (pdftex.def)             Requested size: 241.14749pt x 132.63214pt.
 
-Class acmart Warning: A possible image without description on input line 325.
+Class acmart Warning: A possible image without description on input line 324.
 
-<../results/plots/provider_mode_composition.png, id=238, 722.7pt x 397.485pt>
+[5.5 <../results/plots/provider_hourly_service_profile.png> <../results/plots/p
+rovider_service_span.png> <../results/plots/provider_headway_distribution.png> 
+<../results/plots/provider_trip_duration_distribution.png>]
+<../results/plots/provider_mode_composition.png, id=249, 722.7pt x 397.485pt>
 File: ../results/plots/provider_mode_composition.png Graphic file (type png)
 <use ../results/plots/provider_mode_composition.png>
 Package pdftex.def Info: ../results/plots/provider_mode_composition.png  used o
-n input line 332.
+n input line 331.
 (pdftex.def)             Requested size: 241.14749pt x 132.63214pt.
 
-Class acmart Warning: A possible image without description on input line 335.
 
-<../results/plots/provider_trips_per_route.png, id=240, 578.16pt x 361.35pt>
+Class acmart Warning: A possible image without description on input line 334.
+
+<../results/plots/provider_trips_per_route.png, id=251, 578.16pt x 361.35pt>
 File: ../results/plots/provider_trips_per_route.png Graphic file (type png)
 <use ../results/plots/provider_trips_per_route.png>
 Package pdftex.def Info: ../results/plots/provider_trips_per_route.png  used on
- input line 342.
+ input line 341.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 345.
+Class acmart Warning: A possible image without description on input line 344.
 
-<../results/plots/provider_irregularity.png, id=242, 722.7pt x 397.485pt>
+<../results/plots/provider_irregularity.png, id=253, 722.7pt x 397.485pt>
 File: ../results/plots/provider_irregularity.png Graphic file (type png)
 <use ../results/plots/provider_irregularity.png>
 Package pdftex.def Info: ../results/plots/provider_irregularity.png  used on in
-put line 352.
+put line 351.
 (pdftex.def)             Requested size: 241.14749pt x 132.63214pt.
 
-Class acmart Warning: A possible image without description on input line 355.
+Class acmart Warning: A possible image without description on input line 354.
 
 
-Overfull \hbox (184.58319pt too wide) in paragraph at lines 365--376
+Overfull \hbox (184.58319pt too wide) in paragraph at lines 366--377
  [][] 
  []
 
-<../results/plots/strong_scaling_total_time.png, id=244, 578.16pt x 361.35pt>
+<../results/plots/strong_scaling_total_time.png, id=256, 578.16pt x 361.35pt>
 File: ../results/plots/strong_scaling_total_time.png Graphic file (type png)
 <use ../results/plots/strong_scaling_total_time.png>
 Package pdftex.def Info: ../results/plots/strong_scaling_total_time.png  used o
-n input line 384.
+n input line 385.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 387.
+Class acmart Warning: A possible image without description on input line 388.
 
-<../results/plots/strong_cpu_speedup.png, id=245, 578.16pt x 361.35pt>
+[6.6 <../results/plots/provider_mode_composition.png> <../results/plots/provide
+r_trips_per_route.png> <../results/plots/provider_irregularity.png>]
+<../results/plots/strong_cpu_speedup.png, id=268, 578.16pt x 361.35pt>
 File: ../results/plots/strong_cpu_speedup.png Graphic file (type png)
 <use ../results/plots/strong_cpu_speedup.png>
 Package pdftex.def Info: ../results/plots/strong_cpu_speedup.png  used on input
- line 391.
+ line 392.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 394.
 
-<../results/plots/strong_cpu_breakdown.png, id=246, 578.16pt x 361.35pt>
+Class acmart Warning: A possible image without description on input line 395.
+
+<../results/plots/strong_cpu_breakdown.png, id=269, 578.16pt x 361.35pt>
 File: ../results/plots/strong_cpu_breakdown.png Graphic file (type png)
 <use ../results/plots/strong_cpu_breakdown.png>
 Package pdftex.def Info: ../results/plots/strong_cpu_breakdown.png  used on inp
-ut line 398.
+ut line 399.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 401.
+Class acmart Warning: A possible image without description on input line 402.
 
-[5.5 <../results/plots/provider_peak_offpeak_ratio.png>]
-<../results/plots/weak_scaling_total_time.png, id=263, 578.16pt x 361.35pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+<../results/plots/weak_scaling_total_time.png, id=272, 578.16pt x 361.35pt>
 File: ../results/plots/weak_scaling_total_time.png Graphic file (type png)
 <use ../results/plots/weak_scaling_total_time.png>
 Package pdftex.def Info: ../results/plots/weak_scaling_total_time.png  used on 
-input line 411.
+input line 412.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
 
-Class acmart Warning: A possible image without description on input line 414.
+Class acmart Warning: A possible image without description on input line 415.
 
-<../results/plots/weak_gpu_speedup.png, id=264, 578.16pt x 361.35pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7.7 <../results/plots/strong_scaling_total_time.png> <../results/plots/strong
+_cpu_speedup.png> <../results/plots/strong_cpu_breakdown.png>]
+<../results/plots/weak_gpu_speedup.png, id=286, 578.16pt x 361.35pt>
 File: ../results/plots/weak_gpu_speedup.png Graphic file (type png)
 <use ../results/plots/weak_gpu_speedup.png>
 Package pdftex.def Info: ../results/plots/weak_gpu_speedup.png  used on input l
-ine 418.
+ine 419.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 421.
 
-<../results/plots/weak_cuda_breakdown.png, id=265, 578.16pt x 361.35pt>
+Class acmart Warning: A possible image without description on input line 422.
+
+<../results/plots/weak_cuda_breakdown.png, id=287, 578.16pt x 361.35pt>
 File: ../results/plots/weak_cuda_breakdown.png Graphic file (type png)
 <use ../results/plots/weak_cuda_breakdown.png>
 Package pdftex.def Info: ../results/plots/weak_cuda_breakdown.png  used on inpu
-t line 425.
+t line 426.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 428.
+Class acmart Warning: A possible image without description on input line 429.
 
 
-Underfull \vbox (badness 4660) has occurred while \output is active []
-
- [6.6 <../results/plots/provider_hourly_service_profile.png> <../results/plots/
-provider_service_span.png> <../results/plots/provider_headway_distribution.png>
-] [7.7 <../results/plots/provider_trip_duration_distribution.png> <../results/p
-lots/provider_mode_composition.png> <../results/plots/provider_trips_per_route.
-png> <../results/plots/provider_irregularity.png> <../results/plots/strong_scal
-ing_total_time.png> <../results/plots/strong_cpu_speedup.png>] [8.8 <../results
-/plots/strong_cpu_breakdown.png> <../results/plots/weak_scaling_total_time.png>
- <../results/plots/weak_gpu_speedup.png> <../results/plots/weak_cuda_breakdown.
-png>]
-Overfull \hbox (6.698pt too wide) in paragraph at lines 449--450
+Overfull \hbox (6.698pt too wide) in paragraph at lines 450--451
 \OT1/cmr/m/n/9 (-20) concentrated and the most headway-sparse among the provide
 rs
  []
 
-
+[8.8 <../results/plots/weak_scaling_total_time.png> <../results/plots/weak_gpu_
+speedup.png> <../results/plots/weak_cuda_breakdown.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9.9]
-Overfull \hbox (13.7732pt too wide) in paragraph at lines 518--519
+Overfull \hbox (13.7732pt too wide) in paragraph at lines 519--520
 \OT1/cmr/m/n/9 (-20) schedule-analytics case study into a real-time transit-per
 formance
  []
@@ -1391,10 +1393,6 @@ portant to optimize color contrast for the visually impaired. Taking these impo
 rtant steps when creating your papers will ensure that the widest possible audi
 ence can ingest your work..
 
-
-Overfull \vbox (1.1375pt too high) has occurred while \output is active []
-
-
 (/usr/local/texlive/2026basic/texmf-dist/tex/generic/stringenc/se-pdfdoc.def
 File: se-pdfdoc.def 2019/11/29 v1.12 stringenc: PDFDocEncoding
 )
@@ -1411,12 +1409,12 @@ Package rerunfilecheck Info: File `report.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  38569 strings out of 469006
- 869075 string characters out of 5454814
+ 869066 string characters out of 5454814
  1479489 words of memory out of 5000000
  66173 multiletter control sequences out of 15000+600000
  644281 words of font info for 181 fonts, out of 8000000 for 9000
  480 hyphenation exceptions out of 8191
- 99i,13n,131p,1581b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,12n,131p,1581b,620s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/c
@@ -1436,7 +1434,7 @@ st/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2026basic/texmf
 xmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2026basic
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2026ba
 sic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on report.pdf (10 pages, 1193959 bytes).
+Output written on report.pdf (10 pages, 1194112 bytes).
 PDF statistics:
  410 PDF objects out of 1000 (max. 8388607)
  340 compressed objects within 4 object streams
