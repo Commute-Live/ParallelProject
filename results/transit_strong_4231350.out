@@ -1,0 +1,35 @@
+rm -f transit-analysis transit_analysis_mpi.o transit_analysis_cuda.o
+mpicc -O3 -std=c11 -Wall -Wextra -pedantic -Iinclude -c src/transit_analysis_mpi.c -o transit_analysis_mpi.o
+nvcc -O3 -std=c++14 -Iinclude -gencode arch=compute_70,code=sm_70 -c src/transit_analysis_cuda.cu -o transit_analysis_cuda.o
+src/transit_analysis_cuda.cu(95): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(96): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(97): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(98): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(99): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, uint64_t)
+
+src/transit_analysis_cuda.cu(104): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(106): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(116): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(120): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+src/transit_analysis_cuda.cu(123): error: no instance of overloaded function "atomicAdd" matches the argument list
+            argument types are: (uint64_t *, unsigned long long)
+
+10 errors detected in the compilation of "src/transit_analysis_cuda.cu".
+make: *** [Makefile:27: transit_analysis_cuda.o] Error 1

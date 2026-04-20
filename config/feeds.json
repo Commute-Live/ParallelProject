@@ -1,0 +1,72 @@
+[
+  {
+    "label": "mta_subway",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
+  },
+  {
+    "label": "mta_lirr",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfslirr.zip"
+  },
+  {
+    "label": "mta_mnr",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip"
+  },
+  {
+    "label": "mta_bus_bx",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_bx.zip"
+  },
+  {
+    "label": "mta_bus_b",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_b.zip"
+  },
+  {
+    "label": "mta_bus_m",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_m.zip"
+  },
+  {
+    "label": "mta_bus_q",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_q.zip"
+  },
+  {
+    "label": "mta_bus_si",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_si.zip"
+  },
+  {
+    "label": "mta_busco",
+    "city": "new_york",
+    "url": "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_busco.zip"
+  },
+  {
+    "label": "cta",
+    "city": "chicago",
+    "url": "https://www.transitchicago.com/downloads/sch_data/google_transit.zip"
+  },
+  {
+    "label": "mbta",
+    "city": "boston",
+    "url": "https://cdn.mbta.com/MBTA_GTFS.zip"
+  },
+  {
+    "label": "njt_rail",
+    "city": "new_jersey",
+    "url": "https://www.njtransit.com/rail_data.zip"
+  },
+  {
+    "label": "njt_bus",
+    "city": "new_jersey",
+    "url": "https://www.njtransit.com/bus_data.zip"
+  },
+  {
+    "label": "septa",
+    "city": "philadelphia",
+    "url": "https://www3.septa.org/developer/gtfs_public.zip"
+  }
+]
