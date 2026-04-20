@@ -362,7 +362,9 @@ Table~\ref{tab:providersummary} collects the main provider-side metrics used in 
   \centering
   \caption{Provider-level schedule summary derived from the local binary dataset.}
   \label{tab:providersummary}
-  \small
+  \setlength{\tabcolsep}{4pt}
+  \footnotesize
+  \resizebox{\textwidth}{!}{%
   \begin{tabular}{lrrrrrrrr}
     \toprule
     \textbf{Provider} & \textbf{Trip Starts} & \textbf{Peak/Off-Peak} & \textbf{Median Headway (min)} & \textbf{Avg Duration (min)} & \textbf{Trips/Route} & \textbf{Service Span (hr)} & \textbf{Unique Routes} & \textbf{Dominant Mode} \\
@@ -373,28 +375,29 @@ Table~\ref{tab:providersummary} collects the main provider-side metrics used in 
     NJ Transit & 36,483 & 0.607 & 20.53 & 55.60 & 130.76 & 0.50--29.17 & 279 & Bus \\
     SEPTA & 561,215 & 0.512 & 8.84 & 40.98 & 257.67 & 0.10--27.90 & 2,178 & Bus \\
     \bottomrule
-  \end{tabular}
+  \end{tabular}%
+  }
 \end{table*}
 
 \section{Strong Scaling Parallel Performance}
 \label{sec:strong-scaling}
 The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The committed strong-scaling sweep completed for the CPU backend on the full archive-backed dataset, so the main question here is how much benefit MPI alone gets from additional ranks when the total workload is fixed at 3,703,385 records.
 
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_scaling_total_time.png}
   \caption{Strong scaling of the CPU-only MPI backend on the full archive-backed dataset.}
   \label{fig:strongscaling}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_speedup.png}
   \caption{CPU strong-scaling speedup relative to the two-rank run.}
   \label{fig:strongspeedup}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/strong_cpu_breakdown.png}
   \caption{Strong-scaling runtime breakdown for the CPU-only MPI backend.}
@@ -407,21 +410,21 @@ Figures~\ref{fig:strongscaling}--\ref{fig:strongbreakdown} show why the gains fl
 
 \section{Weak Scaling Parallel Performance}
 \label{sec:weak-scaling}
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_scaling_total_time.png}
   \caption{Weak scaling of the CPU-only MPI backend and the hybrid MPI+CUDA backend.}
   \label{fig:weakscaling}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_gpu_speedup.png}
   \caption{GPU speedup over the CPU-only MPI baseline under weak scaling.}
   \label{fig:weakspeedup}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[tb]
   \centering
   \includegraphics[width=\columnwidth]{../results/plots/weak_cuda_breakdown.png}
   \caption{Weak-scaling runtime breakdown for the hybrid MPI+CUDA backend.}

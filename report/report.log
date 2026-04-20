@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1286,98 +1286,85 @@ put line 351.
 
 Class acmart Warning: A possible image without description on input line 354.
 
-
-Overfull \hbox (184.58319pt too wide) in paragraph at lines 366--377
- [][] 
- []
-
 <../results/plots/strong_scaling_total_time.png, id=256, 578.16pt x 361.35pt>
 File: ../results/plots/strong_scaling_total_time.png Graphic file (type png)
 <use ../results/plots/strong_scaling_total_time.png>
 Package pdftex.def Info: ../results/plots/strong_scaling_total_time.png  used o
-n input line 385.
+n input line 388.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 388.
+Class acmart Warning: A possible image without description on input line 391.
 
-[6.6 <../results/plots/provider_mode_composition.png> <../results/plots/provide
-r_trips_per_route.png> <../results/plots/provider_irregularity.png>]
-<../results/plots/strong_cpu_speedup.png, id=268, 578.16pt x 361.35pt>
+<../results/plots/strong_cpu_speedup.png, id=257, 578.16pt x 361.35pt>
 File: ../results/plots/strong_cpu_speedup.png Graphic file (type png)
 <use ../results/plots/strong_cpu_speedup.png>
 Package pdftex.def Info: ../results/plots/strong_cpu_speedup.png  used on input
- line 392.
+ line 395.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
+Class acmart Warning: A possible image without description on input line 398.
 
-Class acmart Warning: A possible image without description on input line 395.
-
-<../results/plots/strong_cpu_breakdown.png, id=269, 578.16pt x 361.35pt>
+<../results/plots/strong_cpu_breakdown.png, id=258, 578.16pt x 361.35pt>
 File: ../results/plots/strong_cpu_breakdown.png Graphic file (type png)
 <use ../results/plots/strong_cpu_breakdown.png>
 Package pdftex.def Info: ../results/plots/strong_cpu_breakdown.png  used on inp
-ut line 399.
+ut line 402.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 402.
+Class acmart Warning: A possible image without description on input line 405.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+[6.6 <../results/plots/provider_mode_composition.png> <../results/plots/provide
+r_trips_per_route.png> <../results/plots/provider_irregularity.png>]
 <../results/plots/weak_scaling_total_time.png, id=272, 578.16pt x 361.35pt>
 File: ../results/plots/weak_scaling_total_time.png Graphic file (type png)
 <use ../results/plots/weak_scaling_total_time.png>
 Package pdftex.def Info: ../results/plots/weak_scaling_total_time.png  used on 
-input line 412.
+input line 415.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
 
-Class acmart Warning: A possible image without description on input line 415.
+Class acmart Warning: A possible image without description on input line 418.
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [7.7 <../results/plots/strong_scaling_total_time.png> <../results/plots/strong
-_cpu_speedup.png> <../results/plots/strong_cpu_breakdown.png>]
-<../results/plots/weak_gpu_speedup.png, id=286, 578.16pt x 361.35pt>
+<../results/plots/weak_gpu_speedup.png, id=273, 578.16pt x 361.35pt>
 File: ../results/plots/weak_gpu_speedup.png Graphic file (type png)
 <use ../results/plots/weak_gpu_speedup.png>
 Package pdftex.def Info: ../results/plots/weak_gpu_speedup.png  used on input l
-ine 419.
+ine 422.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
+Class acmart Warning: A possible image without description on input line 425.
 
-Class acmart Warning: A possible image without description on input line 422.
-
-<../results/plots/weak_cuda_breakdown.png, id=287, 578.16pt x 361.35pt>
+<../results/plots/weak_cuda_breakdown.png, id=274, 578.16pt x 361.35pt>
 File: ../results/plots/weak_cuda_breakdown.png Graphic file (type png)
 <use ../results/plots/weak_cuda_breakdown.png>
 Package pdftex.def Info: ../results/plots/weak_cuda_breakdown.png  used on inpu
-t line 426.
+t line 429.
 (pdftex.def)             Requested size: 241.14749pt x 150.71283pt.
 
-Class acmart Warning: A possible image without description on input line 429.
+Class acmart Warning: A possible image without description on input line 432.
 
-
-Overfull \hbox (6.698pt too wide) in paragraph at lines 450--451
+[7.7 <../results/plots/strong_scaling_total_time.png> <../results/plots/strong_
+cpu_speedup.png> <../results/plots/strong_cpu_breakdown.png> <../results/plots/
+weak_scaling_total_time.png>]
+Overfull \hbox (6.698pt too wide) in paragraph at lines 453--454
 \OT1/cmr/m/n/9 (-20) concentrated and the most headway-sparse among the provide
 rs
  []
 
-[8.8 <../results/plots/weak_scaling_total_time.png> <../results/plots/weak_gpu_
-speedup.png> <../results/plots/weak_cuda_breakdown.png>]
+
+Underfull \vbox (badness 2096) has occurred while \output is active []
+
+ [8.8 <../results/plots/weak_gpu_speedup.png> <../results/plots/weak_cuda_break
+down.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [9.9]
-Overfull \hbox (13.7732pt too wide) in paragraph at lines 519--520
+Overfull \hbox (13.7732pt too wide) in paragraph at lines 522--523
 \OT1/cmr/m/n/9 (-20) schedule-analytics case study into a real-time transit-per
 formance
  []
 
-(./report.bbl)
+(./report.bbl [9.9])
 
 Class acmart Warning: Some images may lack descriptions.
 (acmart)              ACM is committed to complying with the upcoming US ADA ht
@@ -1408,16 +1395,16 @@ Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: A511EA2022CCCE9FAE0867F45A6AB5C7;6378.
  ) 
 Here is how much of TeX's memory you used:
- 38569 strings out of 469006
- 869066 string characters out of 5454814
+ 38553 strings out of 469006
+ 868830 string characters out of 5454814
  1479489 words of memory out of 5000000
- 66173 multiletter control sequences out of 15000+600000
- 644281 words of font info for 181 fonts, out of 8000000 for 9000
+ 66163 multiletter control sequences out of 15000+600000
+ 643042 words of font info for 176 fonts, out of 8000000 for 9000
  480 hyphenation exceptions out of 8191
- 99i,12n,131p,1581b,620s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,13n,131p,1581b,670s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mbx8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/c
+mbx7.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmbx9.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmmi6.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmmi9.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/a
@@ -1425,19 +1412,18 @@ msfonts/cm/cmr10.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmr12.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmr6.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2026basic/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2026basic/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2026basic/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2026basic/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2026basic
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2026ba
-sic/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on report.pdf (10 pages, 1194112 bytes).
+1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2026basic/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/texlive/2026basic/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2026basic/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2026basic/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2026basic/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2026basi
+c/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on report.pdf (10 pages, 1182106 bytes).
 PDF statistics:
- 410 PDF objects out of 1000 (max. 8388607)
- 340 compressed objects within 4 object streams
+ 406 PDF objects out of 1000 (max. 8388607)
+ 337 compressed objects within 4 object streams
  87 named destinations out of 1000 (max. 500000)
  39299 words of extra memory for PDF output out of 42996 (max. 10000000)
 
