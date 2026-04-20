@@ -436,7 +436,6 @@ The weak-scaling study fixes the records per rank and increases the total worklo
 The CUDA backend behaves differently. Its weak-scaling runtime grows from 0.292\,s at two ranks to about 0.488\,s at sixteen ranks, and it remains far slower than the CPU baseline at every scale. As in the earlier experiments, the local GPU compute phase is only a few milliseconds, but the end-to-end application is still dominated by fixed CUDA overhead. The weak-scaling plots therefore reinforce the same architectural lesson as the summary run: the hybrid MPI+CUDA path is correct, but it is still overhead-bound for this workload.
 
 \section{Analysis of Performance Results}
-\Needspace{14\baselineskip}
 The measured results make the dominant bottlenecks clearer than the original design-level expectations:
 \begin{itemize}[leftmargin=*]
   \item \textbf{CUDA runtime overhead dominates total time.} The measured GPU compute phase is only a few milliseconds, but total application time is hundreds of milliseconds, implying that device setup and transfer overhead are the primary bottleneck.

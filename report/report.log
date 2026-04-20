@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.1)  20 APR 2026 18:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1346,20 +1346,17 @@ Class acmart Warning: A possible image without description on input line 432.
 [7.7 <../results/plots/strong_scaling_total_time.png> <../results/plots/strong_
 cpu_speedup.png> <../results/plots/strong_cpu_breakdown.png> <../results/plots/
 weak_scaling_total_time.png>]
-Overfull \hbox (6.698pt too wide) in paragraph at lines 453--454
+Overfull \hbox (6.698pt too wide) in paragraph at lines 452--453
 \OT1/cmr/m/n/9 (-20) concentrated and the most headway-sparse among the provide
 rs
  []
 
-
-Underfull \vbox (badness 2096) has occurred while \output is active []
-
- [8.8 <../results/plots/weak_gpu_speedup.png> <../results/plots/weak_cuda_break
-down.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[8.8 <../results/plots/weak_gpu_speedup.png> <../results/plots/weak_cuda_breakd
+own.png>]
+Underfull \vbox (badness 3049) has occurred while \output is active []
 
 
-Overfull \hbox (13.7732pt too wide) in paragraph at lines 522--523
+Overfull \hbox (13.7732pt too wide) in paragraph at lines 521--522
 \OT1/cmr/m/n/9 (-20) schedule-analytics case study into a real-time transit-per
 formance
  []
@@ -1401,7 +1398,7 @@ Here is how much of TeX's memory you used:
  66163 multiletter control sequences out of 15000+600000
  643042 words of font info for 176 fonts, out of 8000000 for 9000
  480 hyphenation exceptions out of 8191
- 99i,13n,131p,1581b,670s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,12n,131p,1581b,682s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mbx7.pfb></usr/local/texlive/2026basic/texmf-dist/fonts/type1/public/amsfonts/c
@@ -1420,7 +1417,7 @@ ist/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2026basic/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2026basic/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/2026basi
 c/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on report.pdf (10 pages, 1182106 bytes).
+Output written on report.pdf (10 pages, 1182159 bytes).
 PDF statistics:
  406 PDF objects out of 1000 (max. 8388607)
  337 compressed objects within 4 object streams
