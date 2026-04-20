@@ -115,18 +115,19 @@ The preprocessing stage currently produces a consolidated binary dataset of \num
 
 \subsection{Trip-Record Representation}
 The preprocessing stage converts each GTFS trip into a fixed-width record:
-\[
-\langle \texttt{city\_id}, \texttt{feed\_id}, \texttt{route\_type}, \texttt{route\_hash},
-\texttt{service\_mask}, \texttt{direction\_id}, \texttt{start\_secs},
-\texttt{end\_secs}, \texttt{duration\_secs}, \texttt{stop\_count},
-\texttt{trip\_hash}, \texttt{reserved} \rangle
-\]
+\begin{quote}
+\small\ttfamily
+(city\_id, feed\_id, route\_type, route\_hash, service\_mask,\\
+direction\_id, start\_secs, end\_secs, duration\_secs, stop\_count,\\
+trip\_hash, reserved)
+\end{quote}
 This representation is intentionally compact. It avoids expensive string parsing during parallel execution and allows the MPI layer to partition input by record count rather than by text-file boundaries.
 
 Records are sorted by:
-\[
-(\texttt{city\_id}, \texttt{route\_hash}, \texttt{direction\_id}, \texttt{start\_secs}, \texttt{trip\_hash})
-\]
+\begin{quote}
+\small\ttfamily
+(city\_id, route\_hash, direction\_id, start\_secs, trip\_hash)
+\end{quote}
 That sort order is critical because the route-headway computation depends on adjacent records within each city, route, and direction.
 
 \subsection{Analytical Questions}
@@ -152,7 +153,7 @@ Figure~\ref{fig:pipeline} shows the end-to-end workflow.
 \end{figure}
 
 \subsection{Preprocessing}
-The preprocessing stage is implemented in Python. It reads \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, and calendar metadata and then derives one record per trip. During implementation, several real-world GTFS packaging irregularities had to be handled explicitly:
+The preprocessing stage is implemented in Python. It reads \texttt{routes.txt}, \texttt{trips.txt}, \texttt{stop\_times.txt}, and calendar metadata and then derives one record per trip. During implementation, several real-world GTFS packaging differences had to be handled explicitly:
 \begin{itemize}[leftmargin=*]
   \item some feeds include \texttt{calendar\_dates.txt} but no \texttt{calendar.txt};
   \item some providers package multiple nested GTFS archives inside one top-level zip; and
@@ -588,7 +589,7 @@ Table~\ref{tab:providersummary} collects the main provider-side metrics used in 
 
 \section{Strong Scaling Parallel Performance}
 \label{sec:strong-scaling}
-The cluster-side timing study completed successfully after the build issues in the hybrid CUDA path were resolved. The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The observed performance story is more nuanced than the original expectation of a straightforward GPU win: the local CUDA compute kernel is fast, but the end-to-end wall-clock time of the GPU path is dominated by GPU setup and runtime overhead that is not present in the CPU-only MPI baseline. That distinction is important because the assignment asks for total performance analysis, not just kernel timings.
+The figures in this section were generated from the AiMOS output stored in \texttt{experiment\_results.csv}. The observed performance story is more nuanced than the original expectation of a straightforward GPU win: the local CUDA compute kernel is fast, but the end-to-end wall-clock time of the GPU path is dominated by GPU setup and runtime overhead that is not present in the CPU-only MPI baseline. That distinction is important because the assignment asks for total performance analysis, not just kernel timings.
 
 \begin{figure}[t]
   \centering
