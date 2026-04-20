@@ -1,0 +1,183 @@
+{
+  "record_size_bytes": 48,
+  "record_count": 578882,
+  "cities": [
+    {
+      "city_id": 0,
+      "city": "new_york"
+    },
+    {
+      "city_id": 1,
+      "city": "chicago"
+    },
+    {
+      "city_id": 2,
+      "city": "boston"
+    },
+    {
+      "city_id": 3,
+      "city": "new_jersey"
+    },
+    {
+      "city_id": 4,
+      "city": "philadelphia"
+    }
+  ],
+  "city_trip_counts": {
+    "new_york": 290000,
+    "chicago": 94496,
+    "boston": 121506,
+    "new_jersey": 36483,
+    "philadelphia": 36397
+  },
+  "feeds": [
+    {
+      "feed_id": 0,
+      "label": "mta_subway",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 79590,
+      "routes": 29,
+      "trips": 79590
+    },
+    {
+      "feed_id": 1,
+      "label": "mta_lirr",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 2033,
+      "routes": 13,
+      "trips": 2033
+    },
+    {
+      "feed_id": 2,
+      "label": "mta_mnr",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 24333,
+      "routes": 6,
+      "trips": 24333
+    },
+    {
+      "feed_id": 3,
+      "label": "mta_bus_bx",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 32594,
+      "routes": 294,
+      "trips": 32594
+    },
+    {
+      "feed_id": 4,
+      "label": "mta_bus_b",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 46435,
+      "routes": 294,
+      "trips": 46435
+    },
+    {
+      "feed_id": 5,
+      "label": "mta_bus_m",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 30289,
+      "routes": 294,
+      "trips": 30289
+    },
+    {
+      "feed_id": 6,
+      "label": "mta_bus_q",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 24969,
+      "routes": 294,
+      "trips": 24969
+    },
+    {
+      "feed_id": 7,
+      "label": "mta_bus_si",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 13137,
+      "routes": 294,
+      "trips": 13137
+    },
+    {
+      "feed_id": 8,
+      "label": "mta_busco",
+      "city": "new_york",
+      "city_id": 0,
+      "trip_records": 36620,
+      "routes": 92,
+      "trips": 36620
+    },
+    {
+      "feed_id": 9,
+      "label": "cta",
+      "city": "chicago",
+      "city_id": 1,
+      "trip_records": 94496,
+      "routes": 131,
+      "trips": 94496
+    },
+    {
+      "feed_id": 10,
+      "label": "mbta",
+      "city": "boston",
+      "city_id": 2,
+      "trip_records": 121506,
+      "routes": 404,
+      "trips": 121506
+    },
+    {
+      "feed_id": 11,
+      "label": "njt_rail",
+      "city": "new_jersey",
+      "city_id": 3,
+      "trip_records": 3214,
+      "routes": 16,
+      "trips": 3214
+    },
+    {
+      "feed_id": 12,
+      "label": "njt_bus",
+      "city": "new_jersey",
+      "city_id": 3,
+      "trip_records": 33269,
+      "routes": 263,
+      "trips": 33269
+    },
+    {
+      "feed_id": 13,
+      "label": "septa",
+      "city": "philadelphia",
+      "city_id": 4,
+      "trip_records": 36397,
+      "routes": 185,
+      "trips": 36397
+    }
+  ],
+  "binary_path": "data\\processed\\transit_trip_records.bin",
+  "sort_key": [
+    "city_id",
+    "route_hash",
+    "direction_id",
+    "start_secs",
+    "trip_hash"
+  ],
+  "schema": [
+    "city_id",
+    "feed_id",
+    "route_type",
+    "route_hash",
+    "service_mask",
+    "direction_id",
+    "start_secs",
+    "end_secs",
+    "duration_secs",
+    "stop_count",
+    "trip_hash",
+    "reserved"
+  ]
+}
