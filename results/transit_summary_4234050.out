@@ -1,0 +1,25 @@
+rm -f transit-analysis transit_analysis_mpi.o transit_analysis_cuda.o
+mpicc -O3 -std=c11 -Wall -Wextra -pedantic -Iinclude -c src/transit_analysis_mpi.c -o transit_analysis_mpi.o
+nvcc -O3 -std=c++14 -Iinclude -gencode arch=compute_70,code=sm_70 -c src/transit_analysis_cuda.cu -o transit_analysis_cuda.o
+mpicc -O3 -std=c11 -Wall -Wextra -pedantic -Iinclude  transit_analysis_mpi.o transit_analysis_cuda.o -L/usr/local/cuda-11.0/lib64 -lcudart -lm -o transit-analysis
+[dcs229:100176] MCW rank 3 bound to socket 1[core 21[hwt 0-3]]: [..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....][..../BBBB/..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....]
+[dcs229:100176] MCW rank 0 bound to socket 0[core 0[hwt 0-3]]: [BBBB/..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....][..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....]
+[dcs229:100176] MCW rank 1 bound to socket 1[core 20[hwt 0-3]]: [..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....][BBBB/..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....]
+[dcs229:100176] MCW rank 2 bound to socket 0[core 1[hwt 0-3]]: [..../BBBB/..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....][..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../..../....]
+Backend: cuda
+MPI Ranks: 4
+Records analyzed: 3703385
+Cities discovered: 5
+Parallel I/O time: 0.031974 seconds
+Boundary exchange time: 0.000019 seconds
+Local compute time: 0.020367 seconds
+Global reduction time: 0.000181 seconds
+Total analysis time: 0.526330 seconds
+Mean peak-share across cities: 0.350564
+Mean headway across cities: 362.719141 seconds
+Mean headway CV across cities: 2.484694
+City 0: departures=1092299 peak_share=0.3554 avg_trip_duration=3016.40 avg_headway=182.96 headway_cv=2.2052 avg_stop_count=33.04
+City 1: departures=319822 peak_share=0.3426 avg_trip_duration=2977.36 avg_headway=208.10 headway_cv=2.8891 avg_stop_count=60.44
+City 2: departures=1693569 peak_share=0.3384 avg_trip_duration=1842.10 avg_headway=169.23 headway_cv=4.0983 avg_stop_count=26.65
+City 3: departures=36483 peak_share=0.3777 avg_trip_duration=3335.70 avg_headway=820.19 headway_cv=1.5990 avg_stop_count=49.89
+City 4: departures=561215 peak_share=0.3388 avg_trip_duration=2458.88 avg_headway=433.11 headway_cv=1.6318 avg_stop_count=57.96
