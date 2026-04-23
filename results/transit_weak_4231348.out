@@ -1,7 +1,0 @@
-rm -f transit-analysis transit_analysis_mpi.o transit_analysis_cuda.o
-mpicc -O3 -std=c11 -Wall -Wextra -pedantic -Iinclude -c src/transit_analysis_mpi.c -o transit_analysis_mpi.o
-src/transit_analysis_mpi.c:4:10: fatal error: cuda_runtime.h: No such file or directory
- #include <cuda_runtime.h>
-          ^~~~~~~~~~~~~~~~
-compilation terminated.
-make: *** [Makefile:24: transit_analysis_mpi.o] Error 1
