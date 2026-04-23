@@ -2,6 +2,7 @@ TARGET = transit-analysis
 
 SRC_DIR = src
 INC_DIR = include
+SCRIPT_DIR = scripts
 
 MPI_SRC = $(SRC_DIR)/transit_analysis_mpi.c
 CUDA_SRC = $(SRC_DIR)/transit_analysis_cuda.cu
@@ -13,7 +14,7 @@ NVCCFLAGS ?= -O3 -std=c++14 -I$(INC_DIR) -gencode arch=compute_70,code=sm_70
 LDFLAGS ?=
 LDLIBS ?= -L$(CUDA_HOME)/lib64 -lcudart -lm
 
-.PHONY: all clean
+.PHONY: all clean summary strong weak submit
 
 all: $(TARGET)
 
@@ -28,3 +29,17 @@ $(CUDA_OBJ): $(CUDA_SRC) $(INC_DIR)/transit_analysis.h
 
 clean:
 	rm -f $(TARGET) $(MPI_OBJ) $(CUDA_OBJ)
+
+summary:
+	cd $(SCRIPT_DIR) && sbatch sbatch_summary.sh
+
+strong:
+	cd $(SCRIPT_DIR) && sbatch sbatch_strong.sh
+
+weak:
+	cd $(SCRIPT_DIR) && sbatch sbatch_weak.sh
+
+submit:
+	cd $(SCRIPT_DIR) && sbatch sbatch_summary.sh
+	cd $(SCRIPT_DIR) && sbatch sbatch_strong.sh
+	cd $(SCRIPT_DIR) && sbatch sbatch_weak.sh

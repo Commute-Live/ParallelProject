@@ -16,7 +16,7 @@ from pathlib import Path
 
 try:
     import matplotlib.pyplot as plt
-except ModuleNotFoundError:  # pragma: no cover - depends on local environment
+except ModuleNotFoundError: 
     plt = None
 
 
